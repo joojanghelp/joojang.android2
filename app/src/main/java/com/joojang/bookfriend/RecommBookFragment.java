@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,7 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.joojang.bookfriend.adapter.AdapterGridTwoLineLight;
+import com.joojang.bookfriend.adapter.AdapterListBasic;
 import com.joojang.bookfriend.model.Image;
 import com.joojang.bookfriend.utils.Tools;
 import com.joojang.bookfriend.widget.SpacingItemDecoration;
@@ -22,13 +21,13 @@ import com.joojang.bookfriend.widget.SpacingItemDecoration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookFragment extends Fragment {
+public class RecommBookFragment extends Fragment {
 
     private ViewGroup rootView;
     private Context mContext;
 
     private RecyclerView recyclerView;
-    private AdapterGridTwoLineLight mAdapter;
+    private AdapterListBasic mAdapter;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -44,7 +43,7 @@ public class BookFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = (ViewGroup) inflater.inflate(R.layout.fragment_book, container, false);
+        rootView = (ViewGroup) inflater.inflate(R.layout.fragment_recomm_book, container, false);
 
         initComponent();
 
@@ -53,8 +52,8 @@ public class BookFragment extends Fragment {
 
     private void initComponent() {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new GridLayoutManager(mContext, 3));
-        recyclerView.addItemDecoration(new SpacingItemDecoration(3, Tools.dpToPx(mContext, 12), true));
+        recyclerView.setLayoutManager(new GridLayoutManager(mContext, 1));
+        recyclerView.addItemDecoration(new SpacingItemDecoration(1, Tools.dpToPx(mContext, 12), true));
         recyclerView.setHasFixedSize(true);
 
         List<Image> items = new ArrayList<>();
@@ -157,11 +156,11 @@ public class BookFragment extends Fragment {
 
 
         //set data and list adapter
-        mAdapter = new AdapterGridTwoLineLight(mContext, items);
+        mAdapter = new AdapterListBasic(mContext, items);
         recyclerView.setAdapter(mAdapter);
 
         // on item list clicked
-        mAdapter.setOnItemClickListener(new AdapterGridTwoLineLight.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new AdapterListBasic.OnItemClickListener() {
             @Override
             public void onItemClick(View view, Image obj, int position) {
                 Snackbar.make(rootView, obj.name + " clicked", Snackbar.LENGTH_SHORT).show();

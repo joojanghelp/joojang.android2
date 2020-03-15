@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navigation;
 
     FragmentManager fragmentManager;
+    RecommBookFragment recommBookFragment;
     BookFragment bookFragment;
     BookRegistFragment bookRegistFragment;
     SettingFragment settingFragment;
@@ -34,10 +35,11 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
 
         bookFragment = new BookFragment();
+        recommBookFragment = new RecommBookFragment();
         bookRegistFragment = new BookRegistFragment();
         settingFragment = new SettingFragment();
 
-        fragmentManager.beginTransaction().replace(R.id.container, bookFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.container, recommBookFragment).commit();
 
         initComponent();
 
@@ -52,9 +54,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
+                    case R.id.navigation_recomm:
+                        fragmentManager.beginTransaction().replace(R.id.container, recommBookFragment).commit();
+                        tv_ActionBarTitle.setText("권장도서");
+                        return true;
                     case R.id.navigation_recent:
                         fragmentManager.beginTransaction().replace(R.id.container, bookFragment).commit();
-                        tv_ActionBarTitle.setText("도서목록");
+                        tv_ActionBarTitle.setText("독서목록");
                         return true;
                     case R.id.navigation_favorites:
                         fragmentManager.beginTransaction().replace(R.id.container, bookRegistFragment).commit();
@@ -83,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         tv_ActionBarTitle = findViewById(R.id.tv_ActionBarTitle);
-        tv_ActionBarTitle.setText("도서목록");
+        tv_ActionBarTitle.setText("권장도서");
     }
 
     boolean isNavigationHide = false;
