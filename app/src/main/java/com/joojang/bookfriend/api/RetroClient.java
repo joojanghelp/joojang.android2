@@ -4,7 +4,9 @@ import android.content.Context;
 import android.util.Log;
 
 import com.joojang.bookfriend.data.GetKakaoBookSearchResponse;
+import com.joojang.bookfriend.data.JoinResponse;
 import com.joojang.bookfriend.data.LoginResponse;
+import com.joojang.bookfriend.model.JoinUser;
 import com.joojang.bookfriend.model.LoginUser;
 
 
@@ -133,13 +135,35 @@ public class RetroClient {
                     String result = response.body().toString();
                     callback.onSuccess(response.code(), response.body());
                 }else{
-                    Log.d( "RetroClient","onResponse not success : "+response.isSuccessful());
+                    Log.d( "RetroClient","onResponse not success : "+response.code());
                     Log.d( "RetroClient","onResponse not success : "+response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
+                Log.d( "RetroClient","onFailure :"+t.getMessage());
+                callback.onError(t);
+            }
+        });
+    }
+
+    public void register(JoinUser joinUser, final RetroCallback callback) {
+        apiService.register(joinUser).enqueue(new Callback<JoinResponse>() {
+            @Override
+            public void onResponse(Call<JoinResponse> call, Response<JoinResponse> response) {
+                Log.d( "RetroClient","onResponse : "+response);
+                if (response.isSuccessful()) {
+                    String result = response.body().toString();
+                    callback.onSuccess(response.code(), response.body());
+                }else{
+                    Log.d( "RetroClient","onResponse not success : "+response.code());
+                    Log.d( "RetroClient","onResponse not success : "+response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JoinResponse> call, Throwable t) {
                 Log.d( "RetroClient","onFailure :"+t.getMessage());
                 callback.onError(t);
             }

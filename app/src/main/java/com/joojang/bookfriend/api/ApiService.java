@@ -1,7 +1,9 @@
 package com.joojang.bookfriend.api;
 
 import com.joojang.bookfriend.data.GetKakaoBookSearchResponse;
+import com.joojang.bookfriend.data.JoinResponse;
 import com.joojang.bookfriend.data.LoginResponse;
+import com.joojang.bookfriend.model.JoinUser;
 import com.joojang.bookfriend.model.LoginUser;
 
 import retrofit2.Call;
@@ -33,4 +35,7 @@ public interface ApiService {
     @POST(Base_URL_PATH + "/auth/login")
     Call<LoginResponse> login(@Body LoginUser loginUser);
 
+    @Headers({"Content-Type: application/json", "Accept: application/json" ,"Request-Client-Type: A01003"})
+    @POST(Base_URL_PATH + "/auth/register")
+    Call<JoinResponse> register(@Body JoinUser joinUser);
 }
