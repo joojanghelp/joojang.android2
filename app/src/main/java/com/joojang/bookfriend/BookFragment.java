@@ -54,7 +54,7 @@ public class BookFragment extends Fragment {
     private void initComponent() {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(mContext, 3));
-        recyclerView.addItemDecoration(new SpacingItemDecoration(3, Tools.dpToPx(mContext, 12), true));
+        recyclerView.addItemDecoration(new SpacingItemDecoration(3, Tools.dpToPx(mContext, 10), true));
         recyclerView.setHasFixedSize(true);
 
         List<Image> items = new ArrayList<>();

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.joojang.bookfriend.data.GetKakaoBookSearchResponse;
+import com.joojang.bookfriend.data.LoginResponse;
+import com.joojang.bookfriend.model.LoginUser;
 
 
 import java.security.cert.CertificateException;
@@ -50,6 +52,22 @@ public class RetroClient {
         retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(baseUrl)
+                .client(okHttpClient)
+                .build();
+    }
+
+    public RetroClient(Context context, String host) {
+
+        if ( !host.equals("kakao") ) {
+            return;
+        }
+
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .build();
+
+        retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl("https://dapi.kakao.com")
                 .client(okHttpClient)
                 .build();
     }
@@ -106,4 +124,25 @@ public class RetroClient {
     }
 
 
+    public void login(LoginUser loginUser, final RetroCallback callback) {
+        apiService.login(loginUser).enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                Log.d( "RetroClient","onResponse : "+response);
+                if (response.isSuccessful()) {
+                    String result = response.body().toString();
+                    callback.onSuccess(response.code(), response.body());
+                }else{
+                    Log.d( "RetroClient","onResponse not success : "+response.isSuccessful());
+                    Log.d( "RetroClient","onResponse not success : "+response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                Log.d( "RetroClient","onFailure :"+t.getMessage());
+                callback.onError(t);
+            }
+        });
+    }
 }

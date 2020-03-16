@@ -88,7 +88,7 @@ public class RecommBookFragment extends Fragment {
         obj.image = "https://search1.kakaocdn.net/thumb/C116x164.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F1309566%3Ftimestamp%3D20200315134831%3Fmoddttm=202003151431";
         obj.name = "100층짜리 집";
         obj.brief = "2020/03/12";
-        obj.counter = 3;
+        obj.counter = 1;
         items.add(obj);
 
         obj = new Image();
@@ -109,7 +109,7 @@ public class RecommBookFragment extends Fragment {
         obj.image = "https://search1.kakaocdn.net/thumb/C116x164.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F1164542%3Ftimestamp%3D20190127025007%3Fmoddttm=202003151433";
         obj.name = "1학년 이솝 우화";
         obj.brief = "2020/03/12";
-        obj.counter = 3;
+        obj.counter = 1;
         items.add(obj);
 
         obj = new Image();

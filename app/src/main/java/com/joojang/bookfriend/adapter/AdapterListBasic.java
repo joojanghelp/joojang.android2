@@ -38,13 +38,17 @@ public class AdapterListBasic extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public class OriginalViewHolder extends RecyclerView.ViewHolder {
         public ImageView image;
+        public ImageView img_readbook;
         public TextView name;
+        public TextView brief;
         public View lyt_parent;
 
         public OriginalViewHolder(View v) {
             super(v);
             image = (ImageView) v.findViewById(R.id.image);
+            img_readbook = (ImageView) v.findViewById(R.id.img_readbook);
             name = (TextView) v.findViewById(R.id.name);
+            brief = (TextView) v.findViewById(R.id.brief);
             lyt_parent = (View) v.findViewById(R.id.lyt_parent);
         }
     }
@@ -65,7 +69,14 @@ public class AdapterListBasic extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             Image p = items.get(position);
             view.name.setText(p.name);
+//            view.brief.setText(p.brief);
             Tools.displayImageOriginal(ctx, view.image, p.image);
+            if ( p.counter == 1 ){
+                view.img_readbook.setVisibility(View.INVISIBLE);
+            }else{
+                view.img_readbook.setVisibility(View.VISIBLE);
+            }
+
             view.lyt_parent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

@@ -52,7 +52,7 @@ public class BookRegistFragment extends Fragment implements View.OnClickListener
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_book_regist, container, false);
 
-        retroClient = RetroClient.getInstance(mContext).createBaseApi();
+        retroClient = new RetroClient(mContext,"kakao").createBaseApi();
 
         bt_search = rootView.findViewById(R.id.bt_search);
         bt_search.setOnClickListener(this);
@@ -120,7 +120,10 @@ public class BookRegistFragment extends Fragment implements View.OnClickListener
         et_title.setText( kakaoBookDocument.getTitle() );
         et_author.setText( kakaoBookDocument.getAllAuthors() );
         et_publisher.setText( kakaoBookDocument.getPublisher() );
-        tv_content.setText( kakaoBookDocument.getContents() );
+
+        if ( kakaoBookDocument.getContents().length() != 0 ) {
+            tv_content.setText(kakaoBookDocument.getContents()+"...");
+        }
 
         String image_url = "";
         if ( kakaoBookDocument.getThumbnail() != null ){
