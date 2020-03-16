@@ -1,6 +1,7 @@
 package com.joojang.bookfriend;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -163,7 +164,8 @@ public class RecommBookFragment extends Fragment {
         mAdapter.setOnItemClickListener(new AdapterListBasic.OnItemClickListener() {
             @Override
             public void onItemClick(View view, Image obj, int position) {
-                Snackbar.make(rootView, obj.name + " clicked", Snackbar.LENGTH_SHORT).show();
+                Intent intent = new Intent( mContext , BookDetailActivity.class);
+                startActivity(intent);
             }
         });
 
