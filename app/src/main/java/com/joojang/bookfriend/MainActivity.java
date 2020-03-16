@@ -75,31 +75,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        NestedScrollView nested_content = (NestedScrollView) findViewById(R.id.nested_scroll_view);
-        nested_content.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (scrollY < oldScrollY) { // up
-                    animateNavigation(false);
-                }
-                if (scrollY > oldScrollY) { // down
-                    animateNavigation(true);
-                }
-            }
-        });
-
         tv_ActionBarTitle = findViewById(R.id.tv_ActionBarTitle);
         tv_ActionBarTitle.setText("권장도서");
     }
 
-    boolean isNavigationHide = false;
 
-    private void animateNavigation(final boolean hide) {
-        if (isNavigationHide && hide || !isNavigationHide && !hide) return;
-        isNavigationHide = hide;
-        int moveY = hide ? (2 * navigation.getHeight()) : 0;
-        navigation.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
-    }
+
 
 
 

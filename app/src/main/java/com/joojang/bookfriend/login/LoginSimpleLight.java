@@ -57,7 +57,8 @@ public class LoginSimpleLight extends AppCompatActivity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                proc_login();
+                //proc_login();
+                login(null);
             }
         });
     }
