@@ -43,7 +43,7 @@ public class BookFragment extends Fragment {
     private RecyclerView recyclerView;
     private AdapterGridTwoLineLight mAdapter;
 
-    private ArrayList<Book> items;
+    private ArrayList<Book> items = new ArrayList<>();
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -74,8 +74,10 @@ public class BookFragment extends Fragment {
         recyclerView.addItemDecoration(new SpacingItemDecoration(3, Tools.dpToPx(mContext, 10), true));
         recyclerView.setHasFixedSize(true);
 
+
         mAdapter = new AdapterGridTwoLineLight(mContext, items);
         recyclerView.setAdapter(mAdapter);
+
         // on item list clicked
         mAdapter.setOnItemClickListener(new AdapterGridTwoLineLight.OnItemClickListener() {
             @Override
@@ -92,8 +94,6 @@ public class BookFragment extends Fragment {
 
     private void setData(UserBookListResponse userBookListResponse){
         items = userBookListResponse.getItems();
-
-        //set data and list adapter
         mAdapter.notifyDataSetChanged();
     }
 

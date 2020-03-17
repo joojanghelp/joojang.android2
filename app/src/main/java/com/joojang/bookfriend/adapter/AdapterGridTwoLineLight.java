@@ -1,6 +1,7 @@
 package com.joojang.bookfriend.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.joojang.bookfriend.R;
 import com.joojang.bookfriend.model.Book;
-import com.joojang.bookfriend.model.Image;
 import com.joojang.bookfriend.utils.Tools;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import java.util.List;
 
 public class AdapterGridTwoLineLight extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<Book> items = new ArrayList<>();
+    private ArrayList<Book> items;
 
     private OnLoadMoreListener onLoadMoreListener;
 
@@ -35,7 +35,7 @@ public class AdapterGridTwoLineLight extends RecyclerView.Adapter<RecyclerView.V
         this.mOnItemClickListener = mItemClickListener;
     }
 
-    public AdapterGridTwoLineLight(Context context, List<Book> items) {
+    public AdapterGridTwoLineLight(Context context, ArrayList<Book> items) {
         this.items = items;
         ctx = context;
     }
@@ -85,6 +85,7 @@ public class AdapterGridTwoLineLight extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public int getItemCount() {
+        Log.d("recycler","getItemcount:"+items.size());
         return items.size();
     }
 
