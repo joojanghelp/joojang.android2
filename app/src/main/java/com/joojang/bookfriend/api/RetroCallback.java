@@ -7,4 +7,5 @@ package com.joojang.bookfriend.api;
 public interface RetroCallback<T> {
     void onError(Throwable t);
     void onSuccess(int code, T receiveData);
+    void onFail(int code, String message);
 }

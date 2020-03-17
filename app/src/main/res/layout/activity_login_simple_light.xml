@@ -7,10 +7,11 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/spacing_large">
 
         <LinearLayout
-            android:layout_width="330dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:orientation="vertical"
@@ -28,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_medium"
-                android:text="Welcome BookFriend."
+                android:text="만나서 반갑습니다."
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:textColor="@color/blue_grey_800"
                 android:textStyle="bold" />
@@ -60,7 +61,8 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textColor="@color/blue_grey_300"
-                android:theme="@style/EditText.Grey" />
+                android:theme="@style/EditText.Grey"
+                android:text="sm.park@healthmax.co.kr"/>
 
             <View
                 android:layout_width="0dp"
@@ -86,7 +88,8 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textColor="@color/blue_grey_300"
-                android:theme="@style/EditText.Grey" />
+                android:theme="@style/EditText.Grey"
+                android:text="1212"/>
 
             <View
                 android:layout_width="0dp"

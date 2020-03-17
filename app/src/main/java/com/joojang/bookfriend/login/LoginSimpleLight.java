@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.joojang.bookfriend.BaseApplication;
 import com.joojang.bookfriend.BookRegistFragment;
 import com.joojang.bookfriend.MainActivity;
 import com.joojang.bookfriend.R;
@@ -57,8 +58,8 @@ public class LoginSimpleLight extends AppCompatActivity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //proc_login();
-                login(null);
+                proc_login();
+//                login(null);
             }
         });
     }
@@ -68,9 +69,6 @@ public class LoginSimpleLight extends AppCompatActivity {
 
         String login_email = et_login_email.getText().toString().trim();
         String login_password = et_login_password.getText().toString().trim();
-
-        login_email="sm.park@healthmax.co.kr";
-        login_password="1212";
 
         if ( login_email == null || login_email.length() == 0 ){
             Toast.makeText( this ,"아이디를 입력해주세요.",Toast.LENGTH_SHORT).show();
@@ -100,10 +98,20 @@ public class LoginSimpleLight extends AppCompatActivity {
                     login(loginResponse);
                 }
             }
+
+            @Override
+            public void onFail(int code, String message) {
+                Log.d( TAG,"onFail : "+code);
+                Log.d( TAG,"onFail : "+message);
+                login(null);
+            }
         });
     }
 
     private void login(LoginResponse loginResponse){
+
+        BaseApplication.getInstance().setLOGINTOKEN( loginResponse.getAccess_token() );
+
         Intent intent = new Intent( getApplicationContext() , MainActivity.class);
         startActivity(intent);
         finish();

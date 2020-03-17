@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,24 +19,44 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.Result;
+import com.google.zxing.ResultPoint;
+import com.google.zxing.integration.android.IntentIntegrator;
 import com.joojang.bookfriend.api.ApiResultCode;
 import com.joojang.bookfriend.api.RetroCallback;
 import com.joojang.bookfriend.api.RetroClient;
 import com.joojang.bookfriend.data.GetKakaoBookSearchResponse;
 import com.joojang.bookfriend.model.KakaoBookDocument;
 import com.joojang.bookfriend.utils.Tools;
+import com.journeyapps.barcodescanner.BarcodeCallback;
+import com.journeyapps.barcodescanner.BarcodeResult;
+import com.journeyapps.barcodescanner.CaptureManager;
+import com.journeyapps.barcodescanner.CompoundBarcodeView;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
-public class BookRegistFragment extends Fragment implements View.OnClickListener {
+import java.util.ArrayList;
+import java.util.List;
+
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
+
+public class BookRegistFragment extends Fragment implements View.OnClickListener , ZXingScannerView.ResultHandler {
 
     private final String TAG = BookRegistFragment.class.getSimpleName();
 
-    private Button bt_search;
+    private Button bt_search,bt_regist;
     private EditText et_isbn , et_title, et_author, et_publisher ;
     private ImageView image_searchbook;
     private TextView tv_content;
+    private LinearLayout ll_search_book;
 
     private RetroClient retroClient;
     private Context mContext;
+
+    private CaptureManager manager;
+    private DecoratedBarcodeView barcodeView;
+
+    private  ZXingScannerView mScannerView;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -57,6 +79,8 @@ public class BookRegistFragment extends Fragment implements View.OnClickListener
         bt_search = rootView.findViewById(R.id.bt_search);
         bt_search.setOnClickListener(this);
 
+        bt_regist = rootView.findViewById(R.id.bt_regist);
+
         et_isbn = rootView.findViewById(R.id.et_isbn);
         et_title = rootView.findViewById(R.id.et_title);
         et_author = rootView.findViewById(R.id.et_author);
@@ -65,7 +89,32 @@ public class BookRegistFragment extends Fragment implements View.OnClickListener
 
         tv_content = rootView.findViewById(R.id.tv_content);
 
+        ll_search_book = rootView.findViewById(R.id.ll_search_book);
+        ll_search_book.setVisibility(View.GONE);
+        bt_regist.setVisibility(View.GONE);
+
+        FrameLayout cameraLayout = (FrameLayout) rootView.findViewById(R.id.fl_camera_layout);
+        mScannerView = new ZXingScannerView(getActivity());
+        List<BarcodeFormat> formats = new ArrayList<>();
+        formats.add(BarcodeFormat.EAN_13);
+        formats.add(BarcodeFormat.EAN_8);
+        mScannerView.setFormats(formats);
+        cameraLayout.addView(mScannerView);
+
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mScannerView.setResultHandler(this);
+        mScannerView.startCamera();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mScannerView.stopCamera();
     }
 
     @Override
@@ -112,10 +161,19 @@ public class BookRegistFragment extends Fragment implements View.OnClickListener
 
                 }
             }
+
+            @Override
+            public void onFail(int code, String message) {
+                Log.d( TAG,"onFail : "+code);
+                Log.d( TAG,"onFail : "+message);
+            }
         });
     }
 
     private void setData(KakaoBookDocument kakaoBookDocument){
+
+        ll_search_book.setVisibility(View.VISIBLE);
+        bt_regist.setVisibility(View.VISIBLE);
 
         et_title.setText( kakaoBookDocument.getTitle() );
         et_author.setText( kakaoBookDocument.getAllAuthors() );
@@ -131,5 +189,24 @@ public class BookRegistFragment extends Fragment implements View.OnClickListener
         }
         Tools.displayImageOriginal(mContext, image_searchbook , image_url);
 
+        mScannerView.resumeCameraPreview(this);
+    }
+
+    @Override
+    public void handleResult(Result result) {
+        Log.d(TAG, "handleResult result " + result.getText());
+        String scanResult = result.getText();
+        if ( scanResult == null || scanResult.length() == 0 ){
+            return;
+        }
+
+        et_title.setText("");
+        et_author.setText("");
+        et_publisher.setText("");
+        tv_content.setText("");
+        Tools.displayImageOriginal(mContext, image_searchbook , null );
+
+        et_isbn.setText( scanResult );
+        bookSearch();
     }
 }

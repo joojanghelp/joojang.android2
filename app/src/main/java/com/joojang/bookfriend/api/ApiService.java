@@ -1,8 +1,10 @@
 package com.joojang.bookfriend.api;
 
+import com.joojang.bookfriend.BaseApplication;
 import com.joojang.bookfriend.data.GetKakaoBookSearchResponse;
 import com.joojang.bookfriend.data.JoinResponse;
 import com.joojang.bookfriend.data.LoginResponse;
+import com.joojang.bookfriend.data.UserBookListResponse;
 import com.joojang.bookfriend.model.JoinUser;
 import com.joojang.bookfriend.model.LoginUser;
 
@@ -11,6 +13,7 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -38,4 +41,8 @@ public interface ApiService {
     @Headers({"Content-Type: application/json", "Accept: application/json" ,"Request-Client-Type: A01003"})
     @POST(Base_URL_PATH + "/auth/register")
     Call<JoinResponse> register(@Body JoinUser joinUser);
+
+    @Headers({"Content-Type: application/json", "Accept: application/json" ,"Request-Client-Type: A01003" })
+    @GET(Base_URL_PATH + "/user/books")
+    Call<UserBookListResponse> getUserBooks(@Header("Authorization") String token);
 }

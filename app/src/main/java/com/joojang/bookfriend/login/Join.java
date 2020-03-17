@@ -100,6 +100,13 @@ public class Join extends AppCompatActivity {
                     join(joinResponse);
                 }
             }
+
+            @Override
+            public void onFail(int code, String message) {
+                Log.d( TAG,"onFail : "+code);
+                Log.d( TAG,"onFail : "+message);
+            }
+
         });
     }
 

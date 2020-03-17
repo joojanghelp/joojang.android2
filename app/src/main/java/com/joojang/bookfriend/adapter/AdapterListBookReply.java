@@ -9,48 +9,49 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import com.joojang.bookfriend.R;
-import com.joojang.bookfriend.model.Book;
+import com.joojang.bookfriend.model.BookReply;
 import com.joojang.bookfriend.model.Image;
 import com.joojang.bookfriend.utils.Tools;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdapterGridTwoLineLight extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AdapterListBookReply extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<Book> items = new ArrayList<>();
-
-    private OnLoadMoreListener onLoadMoreListener;
+    private List<BookReply> items = new ArrayList<>();
 
     private Context ctx;
     private OnItemClickListener mOnItemClickListener;
 
     public interface OnItemClickListener {
-        void onItemClick(View view, Book obj, int position);
+        void onItemClick(View view, BookReply obj, int position);
     }
 
     public void setOnItemClickListener(final OnItemClickListener mItemClickListener) {
         this.mOnItemClickListener = mItemClickListener;
     }
 
-    public AdapterGridTwoLineLight(Context context, List<Book> items) {
+    public AdapterListBookReply(Context context, List<BookReply> items) {
         this.items = items;
         ctx = context;
     }
 
     public class OriginalViewHolder extends RecyclerView.ViewHolder {
-        public ImageView image;
-        public TextView name;
-        public TextView brief;
+
+        public TextView tv_re_username;
+        public TextView tv_re_registdate;
+        public TextView tv_re_replycategory;
+        public TextView tv_re_replycontent;
         public View lyt_parent;
 
         public OriginalViewHolder(View v) {
             super(v);
-            image = (ImageView) v.findViewById(R.id.image);
-            name = (TextView) v.findViewById(R.id.name);
-            brief = (TextView) v.findViewById(R.id.brief);
+
+            tv_re_username = (TextView) v.findViewById(R.id.tv_re_username);
+            tv_re_registdate = (TextView) v.findViewById(R.id.tv_re_registdate);
+            tv_re_replycategory = (TextView) v.findViewById(R.id.tv_re_replycategory);
+            tv_re_replycontent = (TextView) v.findViewById(R.id.tv_re_replycontent);
             lyt_parent = (View) v.findViewById(R.id.lyt_parent);
         }
     }
@@ -58,7 +59,7 @@ public class AdapterGridTwoLineLight extends RecyclerView.Adapter<RecyclerView.V
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder vh;
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_grid_image_two_line_light, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_book_reply, parent, false);
         vh = new OriginalViewHolder(v);
         return vh;
     }
@@ -66,12 +67,16 @@ public class AdapterGridTwoLineLight extends RecyclerView.Adapter<RecyclerView.V
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        Book obj = items.get(position);
         if (holder instanceof OriginalViewHolder) {
             OriginalViewHolder view = (OriginalViewHolder) holder;
-            view.name.setText(obj.getTitle());
-            view.brief.setText(obj.getAuthors());
-            Tools.displayImageOriginal(ctx, view.image, obj.getThumbnail());
+
+            BookReply p = items.get(position);
+
+            view.tv_re_username.setText(p.getUsername());
+            view.tv_re_registdate.setText(p.getRegistdate());
+            view.tv_re_replycategory.setText(p.getReplycategory());
+            view.tv_re_replycontent.setText(p.getReplycontent());
+
             view.lyt_parent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -86,18 +91,6 @@ public class AdapterGridTwoLineLight extends RecyclerView.Adapter<RecyclerView.V
     @Override
     public int getItemCount() {
         return items.size();
-    }
-
-    public Book getItem(int position) {
-        return items.get(position);
-    }
-
-    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
-        this.onLoadMoreListener = onLoadMoreListener;
-    }
-
-    public interface OnLoadMoreListener {
-        void onLoadMore(int current_page);
     }
 
 }

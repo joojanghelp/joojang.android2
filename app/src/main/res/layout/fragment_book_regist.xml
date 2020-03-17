@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbars="none"
-    android:scrollingCache="true">
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/fl_camera_layout"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:padding="@dimen/spacing_large" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/spacing_mlarge">
+        android:padding="@dimen/spacing_large">
 
         <TextView
             android:layout_width="wrap_content"
@@ -19,129 +25,153 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@color/grey_60" />
 
-        <EditText
-            android:id="@+id/et_isbn"
-            style="@style/EditText.Flat.Grey"
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/spacing_xmlarge"
-            android:background="@drawable/edit_text_round_bg_white"
-            android:inputType="numberDecimal"
-            android:minHeight="@dimen/spacing_xmlarge"
-            android:paddingLeft="@dimen/spacing_middle"
-            android:paddingRight="@dimen/spacing_middle"
-            android:text="9788989863786" />
-
-
-        <Button
-            android:id="@+id/bt_search"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginLeft="-4dp"
-            android:layout_marginTop="@dimen/spacing_large"
-            android:layout_marginRight="-4dp"
-            android:background="@drawable/btn_rect_primary"
-            android:text="찾아오기"
-            android:textAllCaps="false"
-            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-            android:textColor="@android:color/white" />
-
-        <ImageView
-            android:id="@+id/image_searchbook"
-            android:layout_width="140dp"
-            android:layout_height="200dp"
-            android:layout_gravity="center_horizontal"
-            android:foreground="@color/overlay_light_10"
-            android:scaleType="centerCrop" />
-
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_medium"
-            android:layout_marginBottom="@dimen/spacing_medium"
-            android:text="제목"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="@color/grey_60" />
+            android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/et_title"
-            style="@style/EditText.Flat.Grey"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/spacing_xmlarge"
-            android:background="@drawable/edit_text_round_bg_white"
-            android:inputType="numberDecimal"
-            android:minHeight="@dimen/spacing_xmlarge"
-            android:paddingLeft="@dimen/spacing_middle"
-            android:paddingRight="@dimen/spacing_middle" />
+            <EditText
+                android:id="@+id/et_isbn"
+                style="@style/EditText.Flat.Grey"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spacing_xmlarge"
+                android:layout_weight="1"
+                android:background="@drawable/edit_text_round_bg_white"
+                android:inputType="numberDecimal"
+                android:minHeight="@dimen/spacing_xmlarge"
+                android:paddingLeft="@dimen/spacing_middle"
+                android:paddingRight="@dimen/spacing_middle"
+                android:text="9788989863786" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/spacing_medium"
-            android:text="지은이"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="@color/grey_60" />
 
-        <EditText
-            android:id="@+id/et_author"
-            style="@style/EditText.Flat.Grey"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/spacing_xmlarge"
-            android:background="@drawable/edit_text_round_bg_white"
-            android:inputType="numberDecimal"
-            android:minHeight="@dimen/spacing_xmlarge"
-            android:paddingLeft="@dimen/spacing_middle"
-            android:paddingRight="@dimen/spacing_middle" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/spacing_medium"
-            android:text="출판사"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="@color/grey_60" />
-
-        <EditText
-            android:id="@+id/et_publisher"
-            style="@style/EditText.Flat.Grey"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/spacing_xmlarge"
-            android:background="@drawable/edit_text_round_bg_white"
-            android:inputType="numberDecimal"
-            android:minHeight="@dimen/spacing_xmlarge"
-            android:paddingLeft="@dimen/spacing_middle"
-            android:paddingRight="@dimen/spacing_middle" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/spacing_medium"
-            android:text="줄거리"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="@color/grey_60" />
-
-        <TextView
-            android:id="@+id/tv_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_large"
-            android:layout_marginBottom="@dimen/spacing_large"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="@color/grey_60" />
-
-        <Button
-            android:id="@+id/bt_regist"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginLeft="-4dp"
-            android:layout_marginTop="@dimen/spacing_large"
-            android:layout_marginRight="-4dp"
-            android:background="@drawable/btn_rect_primary"
-            android:text="등록하기"
-            android:textAllCaps="false"
-            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-            android:textColor="@android:color/white" />
+            <Button
+                android:id="@+id/bt_search"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@drawable/btn_rect_primary"
+                android:text="찾아오기"
+                android:textAllCaps="false"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
     </LinearLayout>
 
-</androidx.core.widget.NestedScrollView>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:padding="@dimen/spacing_large"
+        android:scrollbars="none"
+        android:scrollingCache="true">
+
+        <LinearLayout
+            android:id="@+id/ll_search_book"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/image_searchbook"
+                android:layout_width="140dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center_horizontal"
+                android:foreground="@color/overlay_light_10"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:text="제목"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/grey_60" />
+
+            <EditText
+                android:id="@+id/et_title"
+                style="@style/EditText.Flat.Grey"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spacing_xmlarge"
+                android:background="@drawable/edit_text_round_bg_white"
+                android:inputType="numberDecimal"
+                android:minHeight="@dimen/spacing_xmlarge"
+                android:paddingLeft="@dimen/spacing_middle"
+                android:paddingRight="@dimen/spacing_middle" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:text="지은이"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/grey_60" />
+
+            <EditText
+                android:id="@+id/et_author"
+                style="@style/EditText.Flat.Grey"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spacing_xmlarge"
+                android:background="@drawable/edit_text_round_bg_white"
+                android:inputType="numberDecimal"
+                android:minHeight="@dimen/spacing_xmlarge"
+                android:paddingLeft="@dimen/spacing_middle"
+                android:paddingRight="@dimen/spacing_middle" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:text="출판사"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/grey_60" />
+
+            <EditText
+                android:id="@+id/et_publisher"
+                style="@style/EditText.Flat.Grey"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spacing_xmlarge"
+                android:background="@drawable/edit_text_round_bg_white"
+                android:inputType="numberDecimal"
+                android:minHeight="@dimen/spacing_xmlarge"
+                android:paddingLeft="@dimen/spacing_middle"
+                android:paddingRight="@dimen/spacing_middle" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:text="줄거리"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/grey_60" />
+
+            <TextView
+                android:id="@+id/tv_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:layout_marginBottom="@dimen/spacing_large"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/grey_60" />
+
+        </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+
+    <Button
+        android:id="@+id/bt_regist"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginLeft="-4dp"
+        android:layout_marginTop="@dimen/spacing_large"
+        android:layout_marginRight="-4dp"
+        android:background="@drawable/btn_rect_primary"
+        android:text="등록하기"
+        android:textAllCaps="false"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textColor="@android:color/white" />
+
+</LinearLayout>

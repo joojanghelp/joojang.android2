@@ -6,6 +6,7 @@ import android.util.Log;
 import com.joojang.bookfriend.data.GetKakaoBookSearchResponse;
 import com.joojang.bookfriend.data.JoinResponse;
 import com.joojang.bookfriend.data.LoginResponse;
+import com.joojang.bookfriend.data.UserBookListResponse;
 import com.joojang.bookfriend.model.JoinUser;
 import com.joojang.bookfriend.model.LoginUser;
 
@@ -137,6 +138,7 @@ public class RetroClient {
                 }else{
                     Log.d( "RetroClient","onResponse not success : "+response.code());
                     Log.d( "RetroClient","onResponse not success : "+response.message());
+                    callback.onFail(response.code(),response.message());
                 }
             }
 
@@ -164,6 +166,29 @@ public class RetroClient {
 
             @Override
             public void onFailure(Call<JoinResponse> call, Throwable t) {
+                Log.d( "RetroClient","onFailure :"+t.getMessage());
+                callback.onError(t);
+            }
+        });
+    }
+
+    public void getUserBooks(String token, final RetroCallback callback) {
+        apiService.getUserBooks(token).enqueue(new Callback<UserBookListResponse>() {
+            @Override
+            public void onResponse(Call<UserBookListResponse> call, Response<UserBookListResponse> response) {
+                Log.d( "RetroClient","onResponse : "+response);
+                if (response.isSuccessful()) {
+                    String result = response.body().toString();
+                    callback.onSuccess(response.code(), response.body());
+                    Log.d( "RetroClient","onResponse success : "+response.body());
+                }else{
+                    Log.d( "RetroClient","onResponse not success : "+response.code());
+                    Log.d( "RetroClient","onResponse not success : "+response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserBookListResponse> call, Throwable t) {
                 Log.d( "RetroClient","onFailure :"+t.getMessage());
                 callback.onError(t);
             }
