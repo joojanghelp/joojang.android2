@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activity.ReplyRegistActivity"></activity>
+        <activity android:name=".activity.ReplyRegistActivity"></activity>
         <activity android:name=".login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,7 +30,7 @@
             android:name=".login.JoinActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.BookDetailActivity"
+            android:name=".activity.BookDetailActivity"
             android:screenOrientation="portrait" />
     </application>
 

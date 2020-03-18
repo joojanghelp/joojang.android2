@@ -1,4 +1,4 @@
-package com.joojang.bookfriend.Activity;
+package com.joojang.bookfriend.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,26 +16,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.joojang.bookfriend.BaseApplication;
 import com.joojang.bookfriend.R;
-import com.joojang.bookfriend.adapter.AdapterGridTwoLineLight;
+import com.joojang.bookfriend.adapter.AdapterListBasic;
 import com.joojang.bookfriend.api.RetroCallback;
 import com.joojang.bookfriend.api.RetroClient;
-import com.joojang.bookfriend.dataResponse.UserBookListResponse;
+import com.joojang.bookfriend.dataResponse.BookListResponse;
 import com.joojang.bookfriend.model.Book;
+import com.joojang.bookfriend.model.Image;
 import com.joojang.bookfriend.utils.Tools;
 import com.joojang.bookfriend.widget.SpacingItemDecoration;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class BookFragment extends Fragment {
+public class RecommBookFragment extends Fragment {
 
-    private final String TAG = BookFragment.class.getSimpleName();
+    private final String TAG = RecommBookFragment.class.getSimpleName();
     private RetroClient retroClient;
 
     private ViewGroup rootView;
     private Context mContext;
 
     private RecyclerView recyclerView;
-    private AdapterGridTwoLineLight mAdapter;
+    private AdapterListBasic mAdapter;
 
     private ArrayList<Book> items = new ArrayList<>();
 
@@ -53,27 +55,26 @@ public class BookFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = (ViewGroup) inflater.inflate(R.layout.fragment_book, container, false);
+        rootView = (ViewGroup) inflater.inflate(R.layout.fragment_recomm_book, container, false);
 
         retroClient = RetroClient.getInstance(getActivity()).createBaseApi();
+
         initComponent();
+
         return rootView;
     }
 
     private void initComponent() {
-
-        mAdapter = new AdapterGridTwoLineLight(getActivity(), items);
+        mAdapter = new AdapterListBasic(mContext, items);
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-        recyclerView.addItemDecoration(new SpacingItemDecoration(3, Tools.dpToPx(getActivity(), 10), true));
+        recyclerView.setLayoutManager(new GridLayoutManager(mContext, 1));
+        recyclerView.addItemDecoration(new SpacingItemDecoration(1, Tools.dpToPx(mContext, 12), true));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(mAdapter);
 
-        proc_getUserBooks();
-
         // on item list clicked
-        mAdapter.setOnItemClickListener(new AdapterGridTwoLineLight.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new AdapterListBasic.OnItemClickListener() {
             @Override
             public void onItemClick(View view, Book obj, int position) {
                 Intent intent = new Intent( mContext , BookDetailActivity.class);
@@ -81,34 +82,31 @@ public class BookFragment extends Fragment {
             }
         });
 
-
-
+        proc_getRecoomendBooks();
 
     }
 
-    private void setData(UserBookListResponse userBookListResponse){
+    private void setData(BookListResponse bookListResponse){
         items.clear();
-        items.addAll(userBookListResponse.getItems());
+        items.addAll(bookListResponse.getItems());
         mAdapter.notifyDataSetChanged();
     }
 
+    private void proc_getRecoomendBooks(){
 
-    private void proc_getUserBooks(){
-        Log.d(TAG, "proc_getUserBooks:"+ BaseApplication.getInstance().getBearerLOGINTOKEN());
-
-        retroClient.getUserBooks(new RetroCallback() {
+        retroClient.getRecommendBooks(new RetroCallback() {
             @Override
             public void onError(Throwable t) {
-                Log.d(TAG, "proc_getUserBooks onError ");
+                Log.d(TAG, "proc_getRecoomendBooks onError ");
             }
 
             @Override
             public void onSuccess(int code, Object receiveData) {
-                Log.d(TAG, "proc_getUserBooks onSuccess :"+code);
-                UserBookListResponse userBookListResponse = (UserBookListResponse) receiveData;
-                if (userBookListResponse != null) {
-                    Log.d(TAG, "proc_getUserBooks result size: " + userBookListResponse.getItems().size() );
-                    setData(userBookListResponse);
+                Log.d(TAG, "proc_getRecoomendBooks onSuccess :"+code);
+                BookListResponse bookListResponse = (BookListResponse) receiveData;
+                if (bookListResponse != null) {
+                    Log.d(TAG, "proc_getRecoomendBooks result size: " + bookListResponse.getItems().size() );
+                    setData(bookListResponse);
                 }
             }
 
@@ -119,6 +117,8 @@ public class BookFragment extends Fragment {
             }
         });
     }
+
+
 
 
 }

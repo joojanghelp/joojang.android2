@@ -6,7 +6,7 @@ public class Book {
 
     public int list_id;
     public int book_id;
-    public long uuid;
+    public String uuid;
 
     public String title;
     public String authors;
@@ -27,11 +27,11 @@ public class Book {
         this.list_id = list_id;
     }
 
-    public long getUuid() {
+    public String getUuid() {
         return uuid;
     }
 
-    public void setUuid(long uuid) {
+    public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 

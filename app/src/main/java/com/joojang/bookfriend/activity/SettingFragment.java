@@ -1,4 +1,4 @@
-package com.joojang.bookfriend.Activity;
+package com.joojang.bookfriend.activity;
 
 import android.content.Context;
 import android.os.Bundle;

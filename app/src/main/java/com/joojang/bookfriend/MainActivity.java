@@ -9,10 +9,10 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.joojang.bookfriend.Activity.BookFragment;
-import com.joojang.bookfriend.Activity.BookRegistFragment;
-import com.joojang.bookfriend.Activity.RecommBookFragment;
-import com.joojang.bookfriend.Activity.SettingFragment;
+import com.joojang.bookfriend.activity.BookFragment;
+import com.joojang.bookfriend.activity.BookRegistFragment;
+import com.joojang.bookfriend.activity.RecommBookFragment;
+import com.joojang.bookfriend.activity.SettingFragment;
 import com.joojang.bookfriend.utils.Tools;
 
 public class MainActivity extends AppCompatActivity {

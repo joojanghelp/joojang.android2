@@ -8,10 +8,9 @@ import androidx.annotation.NonNull;
 import com.joojang.bookfriend.BaseApplication;
 import com.joojang.bookfriend.common.Constants;
 import com.joojang.bookfriend.dataResponse.DefaultResponse;
-import com.joojang.bookfriend.dataResponse.GetKakaoBookSearchResponse;
 import com.joojang.bookfriend.dataResponse.JoinResponse;
 import com.joojang.bookfriend.dataResponse.LoginResponse;
-import com.joojang.bookfriend.dataResponse.UserBookListResponse;
+import com.joojang.bookfriend.dataResponse.BookListResponse;
 import com.joojang.bookfriend.model.Book;
 import com.joojang.bookfriend.model.JoinUser;
 import com.joojang.bookfriend.model.LoginUser;
@@ -151,9 +150,9 @@ public class RetroClient {
     }
 
     public void getUserBooks(final RetroCallback callback) {
-        apiService.getUserBooks().enqueue(new Callback<UserBookListResponse>() {
+        apiService.getUserBooks().enqueue(new Callback<BookListResponse>() {
             @Override
-            public void onResponse(Call<UserBookListResponse> call, Response<UserBookListResponse> response) {
+            public void onResponse(Call<BookListResponse> call, Response<BookListResponse> response) {
                 Log.d( "RetroClient","onResponse : "+response);
                 if (response.isSuccessful()) {
                     String result = response.body().toString();
@@ -166,7 +165,7 @@ public class RetroClient {
             }
 
             @Override
-            public void onFailure(Call<UserBookListResponse> call, Throwable t) {
+            public void onFailure(Call<BookListResponse> call, Throwable t) {
                 Log.d( "RetroClient","onFailure :"+t.getMessage());
                 callback.onError(t);
             }
@@ -190,6 +189,29 @@ public class RetroClient {
 
             @Override
             public void onFailure(Call<DefaultResponse> call, Throwable t) {
+                Log.d( "RetroClient","onFailure :"+t.getMessage());
+                callback.onError(t);
+            }
+        });
+    }
+
+    public void getRecommendBooks(final RetroCallback callback) {
+        apiService.getUserBooks().enqueue(new Callback<BookListResponse>() {
+            @Override
+            public void onResponse(Call<BookListResponse> call, Response<BookListResponse> response) {
+                Log.d( "RetroClient","onResponse : "+response);
+                if (response.isSuccessful()) {
+                    String result = response.body().toString();
+                    callback.onSuccess(response.code(), response.body());
+                    Log.d( "RetroClient","onResponse success : "+response.body());
+                }else{
+                    Log.d( "RetroClient","onResponse not success : "+response.code());
+                    Log.d( "RetroClient","onResponse not success : "+response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BookListResponse> call, Throwable t) {
                 Log.d( "RetroClient","onFailure :"+t.getMessage());
                 callback.onError(t);
             }

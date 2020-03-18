@@ -5,7 +5,7 @@ import com.joojang.bookfriend.model.Book;
 
 import java.util.ArrayList;
 
-public class UserBookListResponse extends DefaultResponse {
+public class BookListResponse extends DefaultResponse {
 
 
     public ArrayList<Book> items;
@@ -14,7 +14,4 @@ public class UserBookListResponse extends DefaultResponse {
         return items;
     }
 
-    public void setItems(ArrayList<Book> items) {
-        this.items = items;
-    }
 }

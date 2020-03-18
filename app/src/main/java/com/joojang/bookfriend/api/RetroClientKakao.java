@@ -3,24 +3,9 @@ package com.joojang.bookfriend.api;
 import android.content.Context;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.joojang.bookfriend.BaseApplication;
-import com.joojang.bookfriend.common.Constants;
-import com.joojang.bookfriend.dataResponse.DefaultResponse;
 import com.joojang.bookfriend.dataResponse.GetKakaoBookSearchResponse;
-import com.joojang.bookfriend.dataResponse.JoinResponse;
-import com.joojang.bookfriend.dataResponse.LoginResponse;
-import com.joojang.bookfriend.dataResponse.UserBookListResponse;
-import com.joojang.bookfriend.model.Book;
-import com.joojang.bookfriend.model.JoinUser;
-import com.joojang.bookfriend.model.LoginUser;
 
-import java.io.IOException;
-
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

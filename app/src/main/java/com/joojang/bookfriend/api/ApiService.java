@@ -4,7 +4,7 @@ import com.joojang.bookfriend.dataResponse.DefaultResponse;
 import com.joojang.bookfriend.dataResponse.GetKakaoBookSearchResponse;
 import com.joojang.bookfriend.dataResponse.JoinResponse;
 import com.joojang.bookfriend.dataResponse.LoginResponse;
-import com.joojang.bookfriend.dataResponse.UserBookListResponse;
+import com.joojang.bookfriend.dataResponse.BookListResponse;
 import com.joojang.bookfriend.model.Book;
 import com.joojang.bookfriend.model.JoinUser;
 import com.joojang.bookfriend.model.LoginUser;
@@ -12,7 +12,6 @@ import com.joojang.bookfriend.model.LoginUser;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -36,8 +35,12 @@ public interface ApiService {
     Call<JoinResponse> register(@Body JoinUser joinUser);
 
     @GET(Base_URL_PATH + "/user/books")
-    Call<UserBookListResponse> getUserBooks();
+    Call<BookListResponse> getUserBooks();
 
     @POST(Base_URL_PATH + "/user/books")
     Call<DefaultResponse> registerBook(@Body Book book);
+
+    @GET(Base_URL_PATH + "/books/recommend")
+    Call<BookListResponse> getRecommendBooks();
+
 }

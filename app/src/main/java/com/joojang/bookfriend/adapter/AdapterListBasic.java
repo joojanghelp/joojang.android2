@@ -10,28 +10,28 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.joojang.bookfriend.R;
-import com.joojang.bookfriend.model.Image;
+import com.joojang.bookfriend.model.Book;
 import com.joojang.bookfriend.utils.Tools;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class AdapterListBasic extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<Image> items = new ArrayList<>();
+    private List<Book> items;
 
     private Context ctx;
     private OnItemClickListener mOnItemClickListener;
 
     public interface OnItemClickListener {
-        void onItemClick(View view, Image obj, int position);
+        void onItemClick(View view, Book obj, int position);
     }
 
     public void setOnItemClickListener(final OnItemClickListener mItemClickListener) {
         this.mOnItemClickListener = mItemClickListener;
     }
 
-    public AdapterListBasic(Context context, List<Image> items) {
+    public AdapterListBasic(Context context, List<Book> items) {
         this.items = items;
         ctx = context;
     }
@@ -67,14 +67,15 @@ public class AdapterListBasic extends RecyclerView.Adapter<RecyclerView.ViewHold
         if (holder instanceof OriginalViewHolder) {
             OriginalViewHolder view = (OriginalViewHolder) holder;
 
-            Image p = items.get(position);
-            view.name.setText(p.name);
-//            view.brief.setText(p.brief);
-            Tools.displayImageOriginal(ctx, view.image, p.image);
-            if ( p.counter == 1 ){
-                view.img_readbook.setVisibility(View.INVISIBLE);
-            }else{
+            Book p = items.get(position);
+            view.name.setText(p.getTitle());
+            view.brief.setText(p.authors);
+            Tools.displayImageOriginal(ctx, view.image, p.getThumbnail());
+
+            if ( p.read_check ){
                 view.img_readbook.setVisibility(View.VISIBLE);
+            }else{
+                view.img_readbook.setVisibility(View.INVISIBLE);
             }
 
             view.lyt_parent.setOnClickListener(new View.OnClickListener() {
