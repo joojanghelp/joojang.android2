@@ -239,7 +239,7 @@ public class BookRegistFragment extends Fragment implements View.OnClickListener
         String title = et_title.getText().toString().trim();
 
         Book book = new Book();
-        book.setUuid( Long.parseLong( uuid ) );
+        book.setUuid( uuid );
         book.setAuthors( authors );
         book.setContents( contents );
         book.setIsbn( isbn );
