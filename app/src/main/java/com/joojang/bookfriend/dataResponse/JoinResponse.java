@@ -1,4 +1,4 @@
-package com.joojang.bookfriend.data;
+package com.joojang.bookfriend.dataResponse;
 
 
 public class JoinResponse extends DefaultResponse {

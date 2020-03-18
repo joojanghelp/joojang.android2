@@ -3,24 +3,25 @@ package com.joojang.bookfriend.api;
 import android.content.Context;
 import android.util.Log;
 
-import com.joojang.bookfriend.data.GetKakaoBookSearchResponse;
-import com.joojang.bookfriend.data.JoinResponse;
-import com.joojang.bookfriend.data.LoginResponse;
-import com.joojang.bookfriend.data.UserBookListResponse;
+import androidx.annotation.NonNull;
+
+import com.joojang.bookfriend.BaseApplication;
+import com.joojang.bookfriend.common.Constants;
+import com.joojang.bookfriend.dataResponse.DefaultResponse;
+import com.joojang.bookfriend.dataResponse.GetKakaoBookSearchResponse;
+import com.joojang.bookfriend.dataResponse.JoinResponse;
+import com.joojang.bookfriend.dataResponse.LoginResponse;
+import com.joojang.bookfriend.dataResponse.UserBookListResponse;
+import com.joojang.bookfriend.model.Book;
 import com.joojang.bookfriend.model.JoinUser;
 import com.joojang.bookfriend.model.LoginUser;
 
 
-import java.security.cert.CertificateException;
+import java.io.IOException;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,6 +29,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetroClient {
+
+    private final String TAG = RetroClient.class.getSimpleName();
 
     public ApiService apiService;
     public static String baseUrl = ApiService.Base_URL;
@@ -49,7 +52,7 @@ public class RetroClient {
     public RetroClient(Context context) {
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
-////                .addInterceptor(interceptor) // This is used to add ApplicationInterceptor.
+                .addInterceptor(interceptor)
                 .build();
 
         retrofit = new Retrofit.Builder()
@@ -59,36 +62,34 @@ public class RetroClient {
                 .build();
     }
 
-    public RetroClient(Context context, String host) {
+    Interceptor interceptor = new Interceptor() {
 
-        if ( !host.equals("kakao") ) {
-            return;
+        @Override
+        public okhttp3.Response intercept(@NonNull Chain chain) throws IOException {
+            Request newRequest;
+            String token = BaseApplication.getInstance().getLOGINTOKEN();
+            String bearerToken = BaseApplication.getInstance().getBearerLOGINTOKEN();
+            // 모든 API 헤더에 토큰 추가
+            if ( token != null && !token.equals("") ) {
+                Log.d(TAG,"token is not null:"+token);
+                newRequest = chain.request().newBuilder()
+                        .addHeader("Content-Type", "application/json")
+                        .addHeader("Accept", "application/json")
+                        .addHeader("Request-Client-Type", Constants.REQUEST_CLIENT_TYPE)
+                        .addHeader("Authorization", bearerToken)
+                        .build();
+
+            }else{
+                Log.d(TAG,"token is null");
+                newRequest = chain.request().newBuilder()
+                        .addHeader("Content-Type", "application/json")
+                        .addHeader("Accept", "application/json")
+                        .addHeader("Request-Client-Type", Constants.REQUEST_CLIENT_TYPE)
+                        .build();
+            }
+            return chain.proceed(newRequest);
         }
-
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .build();
-
-        retrofit = new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("https://dapi.kakao.com")
-                .client(okHttpClient)
-                .build();
-    }
-
-//    Interceptor interceptor = new Interceptor() {
-//        @Override
-//        public okhttp3.Response intercept(@NonNull Chain chain) throws IOException {
-//            Request newRequest;
-//            // 모든 API 헤더에 토큰 추가
-//            SharedPreferences setting = mContext.getSharedPreferences("autoLogin", 0);
-//            String token = setting.getString(LoginModel.token, "");
-//            newRequest = chain.request().newBuilder()
-//                    .addHeader("token", token)
-//                    .build();
-//
-//            return chain.proceed(newRequest);
-//        }
-//    };
+    };
 
 
     public RetroClient createBaseApi() {
@@ -101,29 +102,6 @@ public class RetroClient {
             throw new RuntimeException("Api service is null");
         }
         return retrofit.create(service);
-    }
-
-
-    public void kakaoBookSearch(String target, String query, final RetroCallback callback) {
-        apiService.kakaoBookSearch(target,query).enqueue(new Callback<GetKakaoBookSearchResponse>() {
-            @Override
-            public void onResponse(Call<GetKakaoBookSearchResponse> call, Response<GetKakaoBookSearchResponse> response) {
-                Log.d( "RetroClient","onResponse"+response);
-                if (response.isSuccessful()) {
-                    String result = response.body().toString();
-                    callback.onSuccess(response.code(), response.body());
-                }else{
-                    Log.d( "RetroClient","onResponse not success : "+response.isSuccessful());
-                    Log.d( "RetroClient","onResponse not success : "+response.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<GetKakaoBookSearchResponse> call, Throwable t) {
-                Log.d( "RetroClient","onFailure :"+t.getMessage());
-                callback.onError(t);
-            }
-        });
     }
 
 
@@ -172,8 +150,8 @@ public class RetroClient {
         });
     }
 
-    public void getUserBooks(String token, final RetroCallback callback) {
-        apiService.getUserBooks(token).enqueue(new Callback<UserBookListResponse>() {
+    public void getUserBooks(final RetroCallback callback) {
+        apiService.getUserBooks().enqueue(new Callback<UserBookListResponse>() {
             @Override
             public void onResponse(Call<UserBookListResponse> call, Response<UserBookListResponse> response) {
                 Log.d( "RetroClient","onResponse : "+response);
@@ -189,6 +167,29 @@ public class RetroClient {
 
             @Override
             public void onFailure(Call<UserBookListResponse> call, Throwable t) {
+                Log.d( "RetroClient","onFailure :"+t.getMessage());
+                callback.onError(t);
+            }
+        });
+    }
+
+    public void registerBook(Book book, final RetroCallback callback) {
+        apiService.registerBook(book).enqueue(new Callback<DefaultResponse>() {
+            @Override
+            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+                Log.d( "RetroClient","onResponse : "+response);
+                if (response.isSuccessful()) {
+                    String result = response.body().toString();
+                    callback.onSuccess(response.code(), response.body());
+                }else{
+                    Log.d( "RetroClient","onResponse not success : "+response.code());
+                    Log.d( "RetroClient","onResponse not success : "+response.message());
+                    callback.onFail(response.code(),response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DefaultResponse> call, Throwable t) {
                 Log.d( "RetroClient","onFailure :"+t.getMessage());
                 callback.onError(t);
             }

@@ -9,24 +9,20 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.joojang.bookfriend.BaseApplication;
-import com.joojang.bookfriend.BookRegistFragment;
 import com.joojang.bookfriend.MainActivity;
 import com.joojang.bookfriend.R;
 import com.joojang.bookfriend.api.RetroCallback;
 import com.joojang.bookfriend.api.RetroClient;
-import com.joojang.bookfriend.data.GetKakaoBookSearchResponse;
-import com.joojang.bookfriend.data.LoginResponse;
-import com.joojang.bookfriend.model.KakaoBookDocument;
+import com.joojang.bookfriend.dataResponse.LoginResponse;
 import com.joojang.bookfriend.model.LoginUser;
 import com.joojang.bookfriend.utils.Tools;
 
 
-public class LoginSimpleLight extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
-    private final String TAG = LoginSimpleLight.class.getSimpleName();
+    private final String TAG = LoginActivity.class.getSimpleName();
 
     private RetroClient retroClient;
 
@@ -49,7 +45,7 @@ public class LoginSimpleLight extends AppCompatActivity {
         ((View) findViewById(R.id.sign_up)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent( getApplicationContext() , Join.class);
+                Intent intent = new Intent( getApplicationContext() , JoinActivity.class);
                 startActivity(intent);
             }
         });
@@ -103,7 +99,7 @@ public class LoginSimpleLight extends AppCompatActivity {
             public void onFail(int code, String message) {
                 Log.d( TAG,"onFail : "+code);
                 Log.d( TAG,"onFail : "+message);
-                login(null);
+                Toast.makeText(getApplicationContext(),code+":"+message,Toast.LENGTH_SHORT).show();
             }
         });
     }

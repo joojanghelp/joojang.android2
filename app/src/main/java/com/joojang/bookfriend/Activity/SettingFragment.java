@@ -1,4 +1,4 @@
-package com.joojang.bookfriend;
+package com.joojang.bookfriend.Activity;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.joojang.bookfriend.R;
 
 public class SettingFragment extends Fragment {
 

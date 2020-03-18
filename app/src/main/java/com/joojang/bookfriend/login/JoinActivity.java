@@ -14,17 +14,15 @@ import com.joojang.bookfriend.MainActivity;
 import com.joojang.bookfriend.R;
 import com.joojang.bookfriend.api.RetroCallback;
 import com.joojang.bookfriend.api.RetroClient;
-import com.joojang.bookfriend.data.JoinResponse;
-import com.joojang.bookfriend.data.LoginResponse;
+import com.joojang.bookfriend.dataResponse.JoinResponse;
 import com.joojang.bookfriend.model.JoinUser;
-import com.joojang.bookfriend.model.LoginUser;
 import com.joojang.bookfriend.utils.Tools;
 
 
 
-public class Join extends AppCompatActivity {
+public class JoinActivity extends AppCompatActivity {
 
-    private final String TAG = Join.class.getSimpleName();
+    private final String TAG = JoinActivity.class.getSimpleName();
 
     private RetroClient retroClient;
 

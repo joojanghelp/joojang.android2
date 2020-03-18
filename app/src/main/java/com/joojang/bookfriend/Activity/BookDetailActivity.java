@@ -1,4 +1,4 @@
-package com.joojang.bookfriend;
+package com.joojang.bookfriend.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,10 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.joojang.bookfriend.adapter.AdapterListBasic;
+import com.joojang.bookfriend.R;
 import com.joojang.bookfriend.adapter.AdapterListBookReply;
 import com.joojang.bookfriend.model.BookReply;
-import com.joojang.bookfriend.model.Image;
 import com.joojang.bookfriend.utils.Tools;
 import com.joojang.bookfriend.widget.SpacingItemDecoration;
 
@@ -47,7 +46,7 @@ public class BookDetailActivity extends AppCompatActivity {
         btn_replay_regist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent( BookDetailActivity.this ,ReplyRegist.class);
+                Intent intent = new Intent( BookDetailActivity.this , ReplyRegistActivity.class);
                 startActivity(intent);
             }
         });

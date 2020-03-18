@@ -83,9 +83,9 @@ public class AdapterGridTwoLineLight extends RecyclerView.Adapter<RecyclerView.V
         }
     }
 
+
     @Override
     public int getItemCount() {
-        Log.d("recycler","getItemcount:"+items.size());
         return items.size();
     }
 

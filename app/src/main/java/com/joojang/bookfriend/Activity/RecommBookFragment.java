@@ -1,4 +1,4 @@
-package com.joojang.bookfriend;
+package com.joojang.bookfriend.Activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
+import com.joojang.bookfriend.R;
 import com.joojang.bookfriend.adapter.AdapterListBasic;
 import com.joojang.bookfriend.model.Image;
 import com.joojang.bookfriend.utils.Tools;

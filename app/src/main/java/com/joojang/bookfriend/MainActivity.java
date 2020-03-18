@@ -2,16 +2,17 @@ package com.joojang.bookfriend;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.joojang.bookfriend.Activity.BookFragment;
+import com.joojang.bookfriend.Activity.BookRegistFragment;
+import com.joojang.bookfriend.Activity.RecommBookFragment;
+import com.joojang.bookfriend.Activity.SettingFragment;
 import com.joojang.bookfriend.utils.Tools;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         bookRegistFragment = new BookRegistFragment();
         settingFragment = new SettingFragment();
 
-        fragmentManager.beginTransaction().replace(R.id.container, recommBookFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.container, recommBookFragment).commitAllowingStateLoss();
 
         initComponent();
 
@@ -55,19 +56,19 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navigation_recomm:
-                        fragmentManager.beginTransaction().replace(R.id.container, recommBookFragment).commit();
+                        fragmentManager.beginTransaction().replace(R.id.container, recommBookFragment).commitAllowingStateLoss();
                         tv_ActionBarTitle.setText("권장도서");
                         return true;
                     case R.id.navigation_recent:
-                        fragmentManager.beginTransaction().replace(R.id.container, bookFragment).commit();
+                        fragmentManager.beginTransaction().replace(R.id.container, bookFragment).commitAllowingStateLoss();
                         tv_ActionBarTitle.setText("독서목록");
                         return true;
                     case R.id.navigation_favorites:
-                        fragmentManager.beginTransaction().replace(R.id.container, bookRegistFragment).commit();
+                        fragmentManager.beginTransaction().replace(R.id.container, bookRegistFragment).commitAllowingStateLoss();
                         tv_ActionBarTitle.setText("도서등록");
                         return true;
                     case R.id.navigation_nearby:
-                        fragmentManager.beginTransaction().replace(R.id.container, settingFragment).commit();
+                        fragmentManager.beginTransaction().replace(R.id.container, settingFragment).commitAllowingStateLoss();
                         tv_ActionBarTitle.setText("설정");
                         return true;
                 }

@@ -1,4 +1,4 @@
-package com.joojang.bookfriend;
+package com.joojang.bookfriend.Activity;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,9 +8,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import com.joojang.bookfriend.R;
 import com.joojang.bookfriend.utils.Tools;
 
-public class ReplyRegist extends AppCompatActivity {
+public class ReplyRegistActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

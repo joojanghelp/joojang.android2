@@ -5,7 +5,7 @@ public class Book {
 
 
     public int list_id;
-    public int id;
+    public int book_id;
     public long uuid;
 
     public String title;
@@ -15,6 +15,9 @@ public class Book {
     public String publisher;
     public String thumbnail;
 
+    public String gubun;
+    public String gubun_name;
+    public boolean read_check;
 
     public int getList_id() {
         return list_id;
@@ -22,14 +25,6 @@ public class Book {
 
     public void setList_id(int list_id) {
         this.list_id = list_id;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public long getUuid() {
@@ -86,5 +81,37 @@ public class Book {
 
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    public int getBook_id() {
+        return book_id;
+    }
+
+    public void setBook_id(int book_id) {
+        this.book_id = book_id;
+    }
+
+    public String getGubun() {
+        return gubun;
+    }
+
+    public void setGubun(String gubun) {
+        this.gubun = gubun;
+    }
+
+    public String getGubun_name() {
+        return gubun_name;
+    }
+
+    public void setGubun_name(String gubun_name) {
+        this.gubun_name = gubun_name;
+    }
+
+    public boolean isRead_check() {
+        return read_check;
+    }
+
+    public void setRead_check(boolean read_check) {
+        this.read_check = read_check;
     }
 }

@@ -1,4 +1,4 @@
-package com.joojang.bookfriend.data;
+package com.joojang.bookfriend.dataResponse;
 
 
 import com.joojang.bookfriend.model.KakaoBookDocument;
