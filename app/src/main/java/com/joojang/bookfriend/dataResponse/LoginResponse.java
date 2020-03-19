@@ -4,7 +4,7 @@ package com.joojang.bookfriend.dataResponse;
 public class LoginResponse extends DefaultResponse {
 
     public String token_type;
-    public String expires_in;
+    public int expires_in;
     public String access_token;
     public String refresh_token;
     public String user_name;
@@ -17,11 +17,11 @@ public class LoginResponse extends DefaultResponse {
         this.token_type = token_type;
     }
 
-    public String getExpires_in() {
+    public int getExpires_in() {
         return expires_in;
     }
 
-    public void setExpires_in(String expires_in) {
+    public void setExpires_in(int expires_in) {
         this.expires_in = expires_in;
     }
 

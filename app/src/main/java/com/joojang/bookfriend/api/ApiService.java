@@ -1,5 +1,6 @@
 package com.joojang.bookfriend.api;
 
+import com.joojang.bookfriend.dataResponse.BookDetailResponse;
 import com.joojang.bookfriend.dataResponse.DefaultResponse;
 import com.joojang.bookfriend.dataResponse.GetKakaoBookSearchResponse;
 import com.joojang.bookfriend.dataResponse.JoinResponse;
@@ -8,12 +9,14 @@ import com.joojang.bookfriend.dataResponse.BookListResponse;
 import com.joojang.bookfriend.model.Book;
 import com.joojang.bookfriend.model.JoinUser;
 import com.joojang.bookfriend.model.LoginUser;
+import com.joojang.bookfriend.model.RefreshToken;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
@@ -27,6 +30,10 @@ public interface ApiService {
     @Headers({"Authorization: "+kakaoToken})
     @GET("/v3/search/book")
     Call<GetKakaoBookSearchResponse> kakaoBookSearch(@Query("target") String target, @Query("query") String query);
+
+
+    @POST(Base_URL_PATH + "/auth/refresh_token")
+    Call<LoginResponse> refreshToken(@Body RefreshToken refreshToken);
 
     @POST(Base_URL_PATH + "/auth/login")
     Call<LoginResponse> login(@Body LoginUser loginUser);
@@ -42,5 +49,8 @@ public interface ApiService {
 
     @GET(Base_URL_PATH + "/books/recommend")
     Call<BookListResponse> getRecommendBooks();
+
+    @GET(Base_URL_PATH + "/books/{book_id}/detail")
+    Call<BookDetailResponse> getBookDetail(@Path("book_id")int book_id);
 
 }

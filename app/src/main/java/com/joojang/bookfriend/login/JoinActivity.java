@@ -17,7 +17,7 @@ import com.joojang.bookfriend.api.RetroClient;
 import com.joojang.bookfriend.dataResponse.JoinResponse;
 import com.joojang.bookfriend.model.JoinUser;
 import com.joojang.bookfriend.utils.Tools;
-
+import com.joojang.bookfriend.utils.Util;
 
 
 public class JoinActivity extends AppCompatActivity {
@@ -62,8 +62,17 @@ public class JoinActivity extends AppCompatActivity {
         String join_email = et_join_email.getText().toString().trim();
         String join_name = et_join_name.getText().toString().trim();
         String join_password = et_join_password1.getText().toString().trim();
+        String join_password2 = et_join_password2.getText().toString().trim();
 
+        if ( !Util.validateEmail(join_email) ){
+            Toast.makeText( this ,"이메일을 입력해주세요.",Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        if ( !Util.validateEmail(join_password) ){
+            Toast.makeText( this ,"비밀번호를 입력해주세요.",Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         if ( join_name == null || join_name.length() == 0 ){
             Toast.makeText( this ,"이름을 입력해주세요.",Toast.LENGTH_SHORT).show();
@@ -75,6 +84,14 @@ public class JoinActivity extends AppCompatActivity {
         }
         if ( join_password == null || join_password.length() == 0 ){
             Toast.makeText( this ,"비밀번호를 입력해주세요.",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if ( join_password2 == null || join_password2.length() == 0 ){
+            Toast.makeText( this ,"비밀번호 확인을 입력해주세요.",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if ( !join_password.equals(join_password2)){
+            Toast.makeText( this ,"비밀번호를 확인해 주세요.",Toast.LENGTH_SHORT).show();
             return;
         }
 

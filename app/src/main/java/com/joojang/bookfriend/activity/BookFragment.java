@@ -75,6 +75,8 @@ public class BookFragment extends Fragment {
             @Override
             public void onItemClick(View view, Book obj, int position) {
                 Intent intent = new Intent( mContext , BookDetailActivity.class);
+                Book book = items.get(position);
+                intent.putExtra("book_id",book.getBook_id());
                 startActivity(intent);
             }
         });

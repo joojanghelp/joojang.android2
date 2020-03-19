@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.joojang.bookfriend.BaseApplication;
 import com.joojang.bookfriend.common.Constants;
+import com.joojang.bookfriend.dataResponse.BookDetailResponse;
 import com.joojang.bookfriend.dataResponse.DefaultResponse;
 import com.joojang.bookfriend.dataResponse.JoinResponse;
 import com.joojang.bookfriend.dataResponse.LoginResponse;
@@ -14,9 +15,12 @@ import com.joojang.bookfriend.dataResponse.BookListResponse;
 import com.joojang.bookfriend.model.Book;
 import com.joojang.bookfriend.model.JoinUser;
 import com.joojang.bookfriend.model.LoginUser;
+import com.joojang.bookfriend.model.RefreshToken;
 
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.Map;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -71,6 +75,25 @@ public class RetroClient {
             // 모든 API 헤더에 토큰 추가
             if ( token != null && !token.equals("") ) {
                 Log.d(TAG,"token is not null:"+token);
+
+                int expire_in = BaseApplication.getInstance().getEXPIRES_IN();
+                Date loginDate = BaseApplication.getInstance().getLOGINDATE();
+                Date expireDate = new Date();
+
+                long diff = expireDate.getTime() - loginDate.getTime();
+                long sec = diff/1000;
+
+                Log.d(TAG,"diff:"+expireDate.getTime()+"-"+loginDate.getTime()+"="+diff+","+sec);
+
+                if ( sec > 2 ){ // 토큰 만료
+                    BaseApplication.getInstance().setLOGINTOKEN(null);
+                    String rtoken = BaseApplication.getInstance().getREFRESHTOKEN();
+                    RefreshToken refreshToken = new RefreshToken();
+                    refreshToken.setRefresh_token(rtoken);
+                    Response<LoginResponse> response = apiService.refreshToken(refreshToken).execute();
+                    Log.d(TAG,"diff:"+response.body().getAccess_token());
+                }
+
                 newRequest = chain.request().newBuilder()
                         .addHeader("Content-Type", "application/json")
                         .addHeader("Accept", "application/json")
@@ -103,6 +126,35 @@ public class RetroClient {
         return retrofit.create(service);
     }
 
+
+    public void refreshToken() {
+
+        String token = BaseApplication.getInstance().getREFRESHTOKEN();
+        RefreshToken refreshToken = new RefreshToken();
+        refreshToken.setRefresh_token(token);
+
+        apiService.refreshToken(refreshToken).enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                Log.d( "RetroClient","onResponse refreshToken: "+response);
+                if (response.isSuccessful()) {
+                    if( response != null && response.body().getAccess_token() != null ) {
+                        BaseApplication.getInstance().setLOGINTOKEN(response.body().getAccess_token());
+                        BaseApplication.getInstance().setREFRESHTOKEN(response.body().getRefresh_token());
+                        Log.d( "RetroClient","token refresh : "+response.body().getAccess_token());
+                    }
+                }else{
+                    Log.d( "RetroClient","onResponse not success : "+response.code());
+                    Log.d( "RetroClient","onResponse not success : "+response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                Log.d( "RetroClient","onFailure :"+t.getMessage());
+            }
+        });
+    }
 
     public void login(LoginUser loginUser, final RetroCallback callback) {
         apiService.login(loginUser).enqueue(new Callback<LoginResponse>() {
@@ -196,7 +248,7 @@ public class RetroClient {
     }
 
     public void getRecommendBooks(final RetroCallback callback) {
-        apiService.getUserBooks().enqueue(new Callback<BookListResponse>() {
+        apiService.getRecommendBooks().enqueue(new Callback<BookListResponse>() {
             @Override
             public void onResponse(Call<BookListResponse> call, Response<BookListResponse> response) {
                 Log.d( "RetroClient","onResponse : "+response);
@@ -212,6 +264,29 @@ public class RetroClient {
 
             @Override
             public void onFailure(Call<BookListResponse> call, Throwable t) {
+                Log.d( "RetroClient","onFailure :"+t.getMessage());
+                callback.onError(t);
+            }
+        });
+    }
+
+    public void getBookDetail(int book_id , final RetroCallback callback) {
+        apiService.getBookDetail(book_id).enqueue(new Callback<BookDetailResponse>() {
+            @Override
+            public void onResponse(Call<BookDetailResponse> call, Response<BookDetailResponse> response) {
+                Log.d( "RetroClient","onResponse : "+response);
+                if (response.isSuccessful()) {
+                    String result = response.body().toString();
+                    callback.onSuccess(response.code(), response.body());
+                    Log.d( "RetroClient","onResponse success : "+response.body());
+                }else{
+                    Log.d( "RetroClient","onResponse not success : "+response.code());
+                    Log.d( "RetroClient","onResponse not success : "+response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BookDetailResponse> call, Throwable t) {
                 Log.d( "RetroClient","onFailure :"+t.getMessage());
                 callback.onError(t);
             }

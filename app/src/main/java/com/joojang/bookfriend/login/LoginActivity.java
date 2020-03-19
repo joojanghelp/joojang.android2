@@ -18,6 +18,11 @@ import com.joojang.bookfriend.api.RetroClient;
 import com.joojang.bookfriend.dataResponse.LoginResponse;
 import com.joojang.bookfriend.model.LoginUser;
 import com.joojang.bookfriend.utils.Tools;
+import com.joojang.bookfriend.utils.Util;
+
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -55,7 +60,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 proc_login();
-//                login(null);
             }
         });
     }
@@ -65,6 +69,16 @@ public class LoginActivity extends AppCompatActivity {
 
         String login_email = et_login_email.getText().toString().trim();
         String login_password = et_login_password.getText().toString().trim();
+
+        if ( !Util.validateEmail(login_email) ){
+            Toast.makeText( this ,"아이디를 입력해주세요.",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+//        if ( !Util.validateEmail(login_password) ){
+//            Toast.makeText( this ,"비밀번호를 입력해주세요.",Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
         if ( login_email == null || login_email.length() == 0 ){
             Toast.makeText( this ,"아이디를 입력해주세요.",Toast.LENGTH_SHORT).show();
@@ -92,6 +106,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (loginResponse != null) {
                     Log.d(TAG, "login result : " + loginResponse.toString() );
                     login(loginResponse);
+//                    login(null);
                 }
             }
 
@@ -106,7 +121,12 @@ public class LoginActivity extends AppCompatActivity {
 
     private void login(LoginResponse loginResponse){
 
-        BaseApplication.getInstance().setLOGINTOKEN( loginResponse.getAccess_token() );
+        if( loginResponse != null && loginResponse.getAccess_token() != null ) {
+            BaseApplication.getInstance().setLOGINTOKEN(loginResponse.getAccess_token());
+            BaseApplication.getInstance().setREFRESHTOKEN(loginResponse.getRefresh_token());
+            BaseApplication.getInstance().setEXPIRES_IN(loginResponse.getExpires_in());
+            BaseApplication.getInstance().setLOGINDATE(new Date());
+        }
 
         Intent intent = new Intent( getApplicationContext() , MainActivity.class);
         startActivity(intent);
