@@ -85,7 +85,7 @@ public class RetroClient {
 
                 Log.d(TAG,"diff:"+expireDate.getTime()+"-"+loginDate.getTime()+"="+diff+","+sec);
 
-                if ( sec > 2 ){ // 토큰 만료
+                if ( sec > expire_in ){ // 토큰 만료
                     BaseApplication.getInstance().setLOGINTOKEN(null);
                     String rtoken = BaseApplication.getInstance().getREFRESHTOKEN();
                     RefreshToken refreshToken = new RefreshToken();

@@ -31,6 +31,7 @@ public class BookDetailActivity extends AppCompatActivity {
     private final String TAG = BookDetailActivity.class.getSimpleName();
     private RetroClient retroClient;
 
+    private List<BookReply> items = new ArrayList<>();
     private RecyclerView recyclerView;
     private AdapterListBookReply mAdapter;
 
@@ -62,11 +63,12 @@ public class BookDetailActivity extends AppCompatActivity {
         tv_publisher = findViewById(R.id.tv_publisher);
         tv_content = findViewById(R.id.tv_content);
 
-
+        mAdapter = new AdapterListBookReply(this, items);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         recyclerView.addItemDecoration(new SpacingItemDecoration(1, Tools.dpToPx(this, 12), true));
         recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(mAdapter);
 
         Button btn_replay_regist = findViewById(R.id.btn_re_write);
         btn_replay_regist.setOnClickListener(new View.OnClickListener() {
@@ -77,30 +79,7 @@ public class BookDetailActivity extends AppCompatActivity {
             }
         });
 
-        List<BookReply> items = new ArrayList<>();
-        BookReply bookReply = new BookReply();
-        bookReply.setUsername("내이름");
-        bookReply.setRegistdate("2020/03/17");
-        bookReply.setReplycategory("편지쓰기");
-        bookReply.setReplycontent("미디어 아티스트 이와이 도시오의 『100층짜리 집』. 신선한 상상력이 살아 숨쉬는 새로운 감각의 숫자 그림책입니다. 별을 바라보기를 좋아하는 '도치'라는 소년이 하늘까지 닿는 이상하고 재미있는 100층짜리 집 꼭대기에 초대받으면서 벌어지는 모험 속으로 아이들을 안내합니다. 누가 도치를 초대했는지 만나봐요.  이 숫자 그림책은 아이들이 도치를 따라 10층씩마다 다람쥐, 개구리, 딱따구리, 박쥐, 거미 등 동물이 살고 있는 100층짜리 집을 탐험해");
-        items.add(bookReply);
 
-        bookReply = new BookReply();
-        bookReply.setUsername("내이름");
-        bookReply.setRegistdate("2020/03/17");
-        bookReply.setReplycategory("편지쓰기");
-        bookReply.setReplycontent("미디어 아티스트 이와이 도시오의 『100층짜리 집』. 신선한 상상력이 살아 숨쉬는 새로운 감각의 숫자 그림책입니다. 별을 바라보기를 좋아하는 '도치'라는 소년이 하늘까지 닿는 이상하고 재미있는 100층짜리 집 꼭대기에 초대받으면서 벌어지는 모험 속으로 아이들을 안내합니다. 누가 도치를 초대했는지 만나봐요.  이 숫자 그림책은 아이들이 도치를 따라 10층씩마다 다람쥐, 개구리, 딱따구리, 박쥐, 거미 등 동물이 살고 있는 100층짜리 집을 탐험해");
-        items.add(bookReply);
-
-        bookReply = new BookReply();
-        bookReply.setUsername("내이름");
-        bookReply.setRegistdate("2020/03/17");
-        bookReply.setReplycategory("편지쓰기");
-        bookReply.setReplycontent("미디어 아티스트 이와이 도시오의 『100층짜리 집』. 신선한 상상력이 살아 숨쉬는 새로운 감각의 숫자 그림책입니다. 별을 바라보기를 좋아하는 '도치'라는 소년이 하늘까지 닿는 이상하고 재미있는 100층짜리 집 꼭대기에 초대받으면서 벌어지는 모험 속으로 아이들을 안내합니다. 누가 도치를 초대했는지 만나봐요.  이 숫자 그림책은 아이들이 도치를 따라 10층씩마다 다람쥐, 개구리, 딱따구리, 박쥐, 거미 등 동물이 살고 있는 100층짜리 집을 탐험해");
-        items.add(bookReply);
-
-        mAdapter = new AdapterListBookReply(this, items);
-        recyclerView.setAdapter(mAdapter);
     }
 
     private void proc_bookDetail(int book_id){
@@ -137,6 +116,10 @@ public class BookDetailActivity extends AppCompatActivity {
         tv_author.setText( bookDetailResponse.getAuthors() );
         tv_publisher.setText( bookDetailResponse.getPublisher() );
         tv_content.setText( bookDetailResponse.getContents() );
+
+
+        items.addAll(bookDetailResponse.getBook_activity());
+        mAdapter.notifyDataSetChanged();
 
     }
 

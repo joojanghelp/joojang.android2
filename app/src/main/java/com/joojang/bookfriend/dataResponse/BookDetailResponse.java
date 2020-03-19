@@ -2,6 +2,7 @@ package com.joojang.bookfriend.dataResponse;
 
 
 import com.joojang.bookfriend.model.Book;
+import com.joojang.bookfriend.model.BookReply;
 
 import java.util.ArrayList;
 
@@ -17,6 +18,7 @@ public class BookDetailResponse extends DefaultResponse {
     public String isbn;
     public String publisher;
     public String thumbnail;
+    public ArrayList<BookReply> book_activity;
 
     public String getUuid() {
         return uuid;
@@ -52,5 +54,9 @@ public class BookDetailResponse extends DefaultResponse {
 
     public String getThumbnail() {
         return thumbnail;
+    }
+
+    public ArrayList<BookReply> getBook_activity() {
+        return book_activity;
     }
 }
