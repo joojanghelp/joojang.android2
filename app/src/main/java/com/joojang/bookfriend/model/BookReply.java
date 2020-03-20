@@ -10,6 +10,7 @@ public class BookReply {
     public String gubun;
     public String gubun_name;
     public String contents;
+    public int book_id;
 
     public String getActivity_id() {
         return activity_id;
@@ -65,5 +66,13 @@ public class BookReply {
 
     public void setContents(String contents) {
         this.contents = contents;
+    }
+
+    public int getBook_id() {
+        return book_id;
+    }
+
+    public void setBook_id(int book_id) {
+        this.book_id = book_id;
     }
 }

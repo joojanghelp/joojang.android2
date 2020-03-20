@@ -37,6 +37,8 @@ public class BookDetailActivity extends AppCompatActivity {
 
     private TextView tv_content,tv_author, tv_publisher, tv_ActionBarTitle ;
 
+    private int mBook_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,12 +50,12 @@ public class BookDetailActivity extends AppCompatActivity {
         Tools.setSystemBarLight(this);
 
 
-        int book_id=getIntent().getIntExtra("book_id",0);
+        mBook_id = getIntent().getIntExtra("book_id",0);
 
-        if ( book_id == 0 ) finish();
+        if ( mBook_id == 0 ) finish();
 
         initComponent();
-        proc_bookDetail(book_id);
+        proc_bookDetail(mBook_id);
     }
 
     private void initComponent(){
@@ -75,6 +77,7 @@ public class BookDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent( BookDetailActivity.this , ReplyRegistActivity.class);
+                intent.putExtra("book_id",mBook_id);
                 startActivity(intent);
             }
         });

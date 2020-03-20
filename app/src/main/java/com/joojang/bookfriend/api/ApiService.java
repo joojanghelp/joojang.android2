@@ -7,6 +7,7 @@ import com.joojang.bookfriend.dataResponse.JoinResponse;
 import com.joojang.bookfriend.dataResponse.LoginResponse;
 import com.joojang.bookfriend.dataResponse.BookListResponse;
 import com.joojang.bookfriend.model.Book;
+import com.joojang.bookfriend.model.BookReply;
 import com.joojang.bookfriend.model.JoinUser;
 import com.joojang.bookfriend.model.LoginUser;
 import com.joojang.bookfriend.model.RefreshToken;
@@ -52,5 +53,8 @@ public interface ApiService {
 
     @GET(Base_URL_PATH + "/books/{book_id}/detail")
     Call<BookDetailResponse> getBookDetail(@Path("book_id")int book_id);
+
+    @POST(Base_URL_PATH + "/user/books/activity")
+    Call<DefaultResponse> registerReply(@Body BookReply bookReply);
 
 }

@@ -13,6 +13,7 @@ import com.joojang.bookfriend.dataResponse.JoinResponse;
 import com.joojang.bookfriend.dataResponse.LoginResponse;
 import com.joojang.bookfriend.dataResponse.BookListResponse;
 import com.joojang.bookfriend.model.Book;
+import com.joojang.bookfriend.model.BookReply;
 import com.joojang.bookfriend.model.JoinUser;
 import com.joojang.bookfriend.model.LoginUser;
 import com.joojang.bookfriend.model.RefreshToken;
@@ -85,13 +86,23 @@ public class RetroClient {
 
                 Log.d(TAG,"diff:"+expireDate.getTime()+"-"+loginDate.getTime()+"="+diff+","+sec);
 
-                if ( sec > expire_in ){ // 토큰 만료
+                if ( sec > 5 ){ // 토큰 만료
                     BaseApplication.getInstance().setLOGINTOKEN(null);
                     String rtoken = BaseApplication.getInstance().getREFRESHTOKEN();
                     RefreshToken refreshToken = new RefreshToken();
                     refreshToken.setRefresh_token(rtoken);
                     Response<LoginResponse> response = apiService.refreshToken(refreshToken).execute();
-                    Log.d(TAG,"diff:"+response.body().getAccess_token());
+
+                    if ( response.body()!=null ) {
+                        Log.d(TAG, "diff:" + response.body().getAccess_token());
+
+                        BaseApplication.getInstance().setLOGINTOKEN(response.body().getAccess_token());
+                        BaseApplication.getInstance().setREFRESHTOKEN(response.body().getRefresh_token());
+                        BaseApplication.getInstance().setEXPIRES_IN(response.body().getExpires_in());
+                        BaseApplication.getInstance().setLOGINDATE(new Date());
+                    }else{
+                        Log.d(TAG, "diff:" + response.body());
+                    }
                 }
 
                 newRequest = chain.request().newBuilder()
@@ -126,35 +137,6 @@ public class RetroClient {
         return retrofit.create(service);
     }
 
-
-    public void refreshToken() {
-
-        String token = BaseApplication.getInstance().getREFRESHTOKEN();
-        RefreshToken refreshToken = new RefreshToken();
-        refreshToken.setRefresh_token(token);
-
-        apiService.refreshToken(refreshToken).enqueue(new Callback<LoginResponse>() {
-            @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                Log.d( "RetroClient","onResponse refreshToken: "+response);
-                if (response.isSuccessful()) {
-                    if( response != null && response.body().getAccess_token() != null ) {
-                        BaseApplication.getInstance().setLOGINTOKEN(response.body().getAccess_token());
-                        BaseApplication.getInstance().setREFRESHTOKEN(response.body().getRefresh_token());
-                        Log.d( "RetroClient","token refresh : "+response.body().getAccess_token());
-                    }
-                }else{
-                    Log.d( "RetroClient","onResponse not success : "+response.code());
-                    Log.d( "RetroClient","onResponse not success : "+response.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
-                Log.d( "RetroClient","onFailure :"+t.getMessage());
-            }
-        });
-    }
 
     public void login(LoginUser loginUser, final RetroCallback callback) {
         apiService.login(loginUser).enqueue(new Callback<LoginResponse>() {
@@ -287,6 +269,29 @@ public class RetroClient {
 
             @Override
             public void onFailure(Call<BookDetailResponse> call, Throwable t) {
+                Log.d( "RetroClient","onFailure :"+t.getMessage());
+                callback.onError(t);
+            }
+        });
+    }
+
+    public void registerReply(BookReply bookReply, final RetroCallback callback) {
+        apiService.registerReply(bookReply).enqueue(new Callback<DefaultResponse>() {
+            @Override
+            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+                Log.d( "RetroClient","onResponse : "+response);
+                if (response.isSuccessful()) {
+                    String result = response.body().toString();
+                    callback.onSuccess(response.code(), response.body());
+                }else{
+                    Log.d( "RetroClient","onResponse not success : "+response.code());
+                    Log.d( "RetroClient","onResponse not success : "+response.message());
+                    callback.onFail(response.code(),response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DefaultResponse> call, Throwable t) {
                 Log.d( "RetroClient","onFailure :"+t.getMessage());
                 callback.onError(t);
             }
