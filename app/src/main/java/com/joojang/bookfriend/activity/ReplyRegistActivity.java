@@ -32,6 +32,9 @@ public class ReplyRegistActivity extends AppCompatActivity {
 
     private RetroClient retroClient;
 
+    private final String[] array_name = new String[]{"느낀점 쓰기", "뒷이야기 꾸미기", "편지 쓰기 ", "상상 일기 쓰기 "};
+    private final String[] array_code = new String[]{"C11000", "C11110", "C11120", "C11130"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +46,7 @@ public class ReplyRegistActivity extends AppCompatActivity {
         retroClient = RetroClient.getInstance(this).createBaseApi();
 
         mBook_id = getIntent().getIntExtra("book_id", 0);
+        mSelectedCode = array_code[0];
 
         et_reply_content = findViewById(R.id.et_reply_content);
         btn_re_write = findViewById(R.id.btn_re_write);
@@ -63,8 +67,7 @@ public class ReplyRegistActivity extends AppCompatActivity {
     }
 
     private void showStateDialog(final View v) {
-        final String[] array_name = new String[]{"느낀점 쓰기", "뒷이야기 꾸미기", "편지 쓰기 ", "상상 일기 쓰기 "};
-        final String[] array_code = new String[]{"C11000", "C11110", "C11120", "C11130"};
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("독서 활동 선택");
         builder.setSingleChoiceItems(array_name, mSelectedItem, new DialogInterface.OnClickListener() {
@@ -107,6 +110,7 @@ public class ReplyRegistActivity extends AppCompatActivity {
 
                 if (code == 201) {
                     Log.d(TAG, "defaultResponse result : " + defaultResponse.getMessage());
+                    finish();
                 } else {
                     Log.d(TAG, "defaultResponse result : " + code);
                 }

@@ -39,16 +39,27 @@ public class AdapterListBasic extends RecyclerView.Adapter<RecyclerView.ViewHold
     public class OriginalViewHolder extends RecyclerView.ViewHolder {
         public ImageView image;
         public ImageView img_readbook;
-        public TextView name;
-        public TextView brief;
+
+        public TextView tv_title;
+        public TextView tv_author;
+        public TextView tv_content;
+        public TextView tv_publisher;
+
+
         public View lyt_parent;
+
+
 
         public OriginalViewHolder(View v) {
             super(v);
             image = (ImageView) v.findViewById(R.id.image);
             img_readbook = (ImageView) v.findViewById(R.id.img_readbook);
-            name = (TextView) v.findViewById(R.id.name);
-            brief = (TextView) v.findViewById(R.id.brief);
+
+            tv_title = (TextView) v.findViewById(R.id.tv_title);
+            tv_author = (TextView) v.findViewById(R.id.tv_author);
+            tv_content = (TextView) v.findViewById(R.id.tv_content);
+            tv_publisher = (TextView) v.findViewById(R.id.tv_publisher);
+
             lyt_parent = (View) v.findViewById(R.id.lyt_parent);
         }
     }
@@ -68,8 +79,12 @@ public class AdapterListBasic extends RecyclerView.Adapter<RecyclerView.ViewHold
             OriginalViewHolder view = (OriginalViewHolder) holder;
 
             Book p = items.get(position);
-            view.name.setText(p.getTitle());
-            view.brief.setText(p.authors);
+
+            view.tv_title.setText(p.getTitle());
+            view.tv_author.setText(p.getAuthors());
+            view.tv_publisher.setText(p.getPublisher());
+            view.tv_content.setText(p.getContents());
+
             Tools.displayImageOriginal(ctx, view.image, p.getThumbnail());
 
             if ( p.read_check ){

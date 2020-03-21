@@ -69,7 +69,7 @@ public class JoinActivity extends AppCompatActivity {
             return;
         }
 
-        if ( !Util.validateEmail(join_password) ){
+        if ( !Util.validatePassword(join_password) ){
             Toast.makeText( this ,"비밀번호를 입력해주세요.",Toast.LENGTH_SHORT).show();
             return;
         }
@@ -126,7 +126,7 @@ public class JoinActivity extends AppCompatActivity {
     }
 
     private void join(JoinResponse joinResponse){
-        Intent intent = new Intent( getApplicationContext() , MainActivity.class);
+        Intent intent = new Intent( getApplicationContext() , LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }

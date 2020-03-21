@@ -38,7 +38,6 @@
             android:maxLength="50"
             android:maxLines="1"
             android:singleLine="true"
-            android:text="내이름"
             android:textColor="@color/blue_grey_300"
             android:theme="@style/EditText.Grey" />
 
@@ -111,7 +110,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:enabled="false"
-            android:text="30 권"
             android:textColor="@color/blue_grey_300"
             android:theme="@style/EditText.Grey" />
 
@@ -133,7 +131,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:enabled="false"
-            android:text="20 건"
             android:textColor="@color/blue_grey_300"
             android:theme="@style/EditText.Grey" />
 

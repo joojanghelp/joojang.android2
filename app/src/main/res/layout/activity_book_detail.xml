@@ -15,7 +15,6 @@
             android:id="@+id/tv_ActionBarTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="강아지똥"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
             android:textColor="@android:color/white" />
     </LinearLayout>
@@ -72,7 +71,6 @@
                             android:layout_height="wrap_content"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:text="이와이 도시오"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                             android:textColor="@color/grey_40" />
                     </LinearLayout>
@@ -96,7 +94,6 @@
                             android:layout_height="wrap_content"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:text="북뱅크"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                             android:textColor="@color/grey_40" />
                     </LinearLayout>

@@ -35,11 +35,9 @@
                 android:textStyle="bold" />
 
 
-
             <View
                 android:layout_width="0dp"
-                android:layout_height="40dp"
-                />
+                android:layout_height="40dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -61,8 +59,7 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textColor="@color/blue_grey_300"
-                android:theme="@style/EditText.Grey"
-                android:text="sm.park@healthmax.co.kr"/>
+                android:theme="@style/EditText.Grey" />
 
             <View
                 android:layout_width="0dp"
@@ -88,8 +85,7 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textColor="@color/blue_grey_300"
-                android:theme="@style/EditText.Grey"
-                android:text="1212"/>
+                android:theme="@style/EditText.Grey" />
 
             <View
                 android:layout_width="0dp"

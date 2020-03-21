@@ -34,7 +34,6 @@
                     android:layout_marginTop="@dimen/spacing_small"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:text="내이름"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                     android:textColor="@color/grey_90"
                     android:textStyle="bold" />
@@ -46,7 +45,6 @@
                     android:layout_marginTop="@dimen/spacing_small"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:text="이와이 도시오"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                     android:textColor="@color/grey_40" />
 
@@ -60,7 +58,6 @@
                 android:layout_marginTop="@dimen/spacing_small"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:text="북뱅크"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                 android:textColor="@color/grey_40" />
 
@@ -71,7 +68,6 @@
                 android:layout_marginTop="@dimen/spacing_small"
                 android:maxLines="10"
                 android:singleLine="false"
-                android:text="북뱅크"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                 android:textColor="@color/grey_40" />
 

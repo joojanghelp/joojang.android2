@@ -106,7 +106,7 @@ public class BookFragment extends Fragment {
             public void onSuccess(int code, Object receiveData) {
                 Log.d(TAG, "proc_getUserBooks onSuccess :"+code);
                 BookListResponse bookListResponse = (BookListResponse) receiveData;
-                if (bookListResponse != null) {
+                if (bookListResponse.getItems() != null) {
                     Log.d(TAG, "proc_getUserBooks result size: " + bookListResponse.getItems().size() );
                     setData(bookListResponse);
                 }
