@@ -6,6 +6,7 @@ import com.joojang.bookfriend.dataResponse.GetKakaoBookSearchResponse;
 import com.joojang.bookfriend.dataResponse.JoinResponse;
 import com.joojang.bookfriend.dataResponse.LoginResponse;
 import com.joojang.bookfriend.dataResponse.BookListResponse;
+import com.joojang.bookfriend.dataResponse.SettingInfoResponse;
 import com.joojang.bookfriend.model.Book;
 import com.joojang.bookfriend.model.BookReply;
 import com.joojang.bookfriend.model.JoinUser;
@@ -56,5 +57,8 @@ public interface ApiService {
 
     @POST(Base_URL_PATH + "/user/books/activity")
     Call<DefaultResponse> registerReply(@Body BookReply bookReply);
+
+    @GET(Base_URL_PATH + "/user/setting")
+    Call<SettingInfoResponse> getSettingInfo();
 
 }

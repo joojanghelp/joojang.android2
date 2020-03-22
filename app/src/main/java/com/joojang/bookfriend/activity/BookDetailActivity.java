@@ -55,7 +55,13 @@ public class BookDetailActivity extends AppCompatActivity {
         if ( mBook_id == 0 ) finish();
 
         initComponent();
+
+    }
+
+    @Override
+    protected void onResume() {
         proc_bookDetail(mBook_id);
+        super.onResume();
     }
 
     private void initComponent(){
