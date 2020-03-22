@@ -17,10 +17,14 @@ import com.joojang.bookfriend.api.RetroCallback;
 import com.joojang.bookfriend.api.RetroClient;
 import com.joojang.bookfriend.dataResponse.LoginResponse;
 import com.joojang.bookfriend.model.LoginUser;
+import com.joojang.bookfriend.model.RefreshToken;
 import com.joojang.bookfriend.utils.Tools;
 import com.joojang.bookfriend.utils.Util;
 
+import java.io.IOException;
 import java.util.Date;
+
+import retrofit2.Response;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -29,11 +33,13 @@ public class LoginActivity extends AppCompatActivity {
 
     private RetroClient retroClient;
 
-    TextInputEditText et_login_email , et_login_password;
+    TextInputEditText et_login_email, et_login_password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_login);
 
         retroClient = RetroClient.getInstance(this).createBaseApi();
@@ -48,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         ((View) findViewById(R.id.sign_up)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent( getApplicationContext() , JoinActivity.class);
+                Intent intent = new Intent(getApplicationContext(), JoinActivity.class);
                 startActivity(intent);
             }
         });
@@ -60,16 +66,22 @@ public class LoginActivity extends AppCompatActivity {
                 proc_login();
             }
         });
+
+        String saveLoginToken = Util.getAccessTokenPreferences(this);
+        if (saveLoginToken != null && saveLoginToken.length() != 0) {
+            autoLogin();
+        }
+
     }
 
-    private void proc_login(){
+    private void proc_login() {
         Log.d(TAG, "proc_login");
 
         String login_email = et_login_email.getText().toString().trim();
         String login_password = et_login_password.getText().toString().trim();
 
-        if ( !Util.validateEmail(login_email) ){
-            Toast.makeText( this ,"아이디를 입력해주세요.",Toast.LENGTH_SHORT).show();
+        if (!Util.validateEmail(login_email)) {
+            Toast.makeText(this, "아이디를 입력해주세요.", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -78,12 +90,12 @@ public class LoginActivity extends AppCompatActivity {
 //            return;
 //        }
 
-        if ( login_email == null || login_email.length() == 0 ){
-            Toast.makeText( this ,"아이디를 입력해주세요.",Toast.LENGTH_SHORT).show();
+        if (login_email == null || login_email.length() == 0) {
+            Toast.makeText(this, "아이디를 입력해주세요.", Toast.LENGTH_SHORT).show();
             return;
         }
-        if ( login_password == null || login_password.length() == 0 ){
-            Toast.makeText( this ,"비밀번호를 입력해주세요.",Toast.LENGTH_SHORT).show();
+        if (login_password == null || login_password.length() == 0) {
+            Toast.makeText(this, "비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -91,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
         loginUser.setEmail(login_email);
         loginUser.setPassword(login_password);
 
-        retroClient.login(loginUser , new RetroCallback() {
+        retroClient.login(loginUser, new RetroCallback() {
             @Override
             public void onError(Throwable t) {
                 Log.d(TAG, "login onError ");
@@ -99,10 +111,10 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(int code, Object receiveData) {
-                Log.d(TAG, "login onSuccess :"+code);
+                Log.d(TAG, "login onSuccess :" + code);
                 LoginResponse loginResponse = (LoginResponse) receiveData;
                 if (loginResponse != null) {
-                    Log.d(TAG, "login result : " + loginResponse.toString() );
+                    Log.d(TAG, "login result : " + loginResponse.toString());
                     login(loginResponse);
 //                    login(null);
                 }
@@ -110,24 +122,59 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFail(int code, String message) {
-                Log.d( TAG,"onFail : "+code);
-                Log.d( TAG,"onFail : "+message);
-                Toast.makeText(getApplicationContext(),code+":"+message,Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onFail : " + code);
+                Log.d(TAG, "onFail : " + message);
+                Toast.makeText(getApplicationContext(), code + ":" + message, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void login(LoginResponse loginResponse){
+    private void login(LoginResponse loginResponse) {
 
-        if( loginResponse != null && loginResponse.getAccess_token() != null ) {
+        if (loginResponse != null && loginResponse.getAccess_token() != null) {
             BaseApplication.getInstance().setLOGINTOKEN(loginResponse.getAccess_token());
             BaseApplication.getInstance().setREFRESHTOKEN(loginResponse.getRefresh_token());
             BaseApplication.getInstance().setEXPIRES_IN(loginResponse.getExpires_in());
             BaseApplication.getInstance().setLOGINDATE(new Date());
+
+            Util.saveAccessTokenPreferences(this, loginResponse.getAccess_token());
+            Util.saveRefreshTokenPreferences(this, loginResponse.getRefresh_token());
+
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+            finish();
+
         }
 
-        Intent intent = new Intent( getApplicationContext() , MainActivity.class);
-        startActivity(intent);
-        finish();
+    }
+
+    private void autoLogin() {
+        String rtoken = Util.getRefreshTokenPreferences(this);
+        RefreshToken refreshToken = new RefreshToken();
+        refreshToken.setRefresh_token(rtoken);
+
+        retroClient.refreshToken(refreshToken, new RetroCallback() {
+            @Override
+            public void onError(Throwable t) {
+                Log.d(TAG, "refreshToken onError ");
+            }
+
+            @Override
+            public void onSuccess(int code, Object receiveData) {
+                Log.d(TAG, "refreshToken onSuccess :" + code);
+                LoginResponse loginResponse = (LoginResponse) receiveData;
+                if (loginResponse != null) {
+                    Log.d(TAG, "refreshToken result : " + loginResponse.toString());
+                    login(loginResponse);
+                }
+            }
+
+            @Override
+            public void onFail(int code, String message) {
+                Log.d(TAG, "onFail : " + code);
+                Log.d(TAG, "onFail : " + message);
+                Toast.makeText(getApplicationContext(), code + ":" + message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
