@@ -73,8 +73,8 @@ public class AdapterListBookReply extends RecyclerView.Adapter<RecyclerView.View
             BookReply p = items.get(position);
 
             view.tv_re_username.setText(p.getUser_name());
-            view.tv_re_registdate.setText(p.getGubun());
-            view.tv_re_replycategory.setText(p.getGubun_name());
+            view.tv_re_registdate.setText(p.getCreate_at());
+            view.tv_re_replycategory.setText("["+p.getGubun_name()+"]");
             view.tv_re_replycontent.setText(p.getContents());
 
             view.lyt_parent.setOnClickListener(new View.OnClickListener() {

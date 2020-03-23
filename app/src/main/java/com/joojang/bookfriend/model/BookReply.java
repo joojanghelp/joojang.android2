@@ -11,6 +11,7 @@ public class BookReply {
     public String gubun_name;
     public String contents;
     public int book_id;
+    public String create_at;
 
     public String getActivity_id() {
         return activity_id;
@@ -74,5 +75,13 @@ public class BookReply {
 
     public void setBook_id(int book_id) {
         this.book_id = book_id;
+    }
+
+    public String getCreate_at() {
+        return create_at;
+    }
+
+    public void setCreate_at(String create_at) {
+        this.create_at = create_at;
     }
 }

@@ -43,10 +43,6 @@ public class JoinActivity extends AppCompatActivity {
         et_join_password1 = findViewById(R.id.et_join_password1);
         et_join_password2 = findViewById(R.id.et_join_password2);
 
-        et_join_name.setText("sm1");
-        et_join_email.setText("sm1.park@healthmax.co.kr");
-        et_join_password1.setText("1212");
-
         Button btn_join = findViewById(R.id.btn_join);
         btn_join.setOnClickListener(new View.OnClickListener() {
             @Override

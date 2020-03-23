@@ -67,11 +67,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        String saveLoginToken = Util.getAccessTokenPreferences(this);
-        if (saveLoginToken != null && saveLoginToken.length() != 0) {
-            autoLogin();
-        }
-
     }
 
     private void proc_login() {
@@ -148,33 +143,5 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void autoLogin() {
-        String rtoken = Util.getRefreshTokenPreferences(this);
-        RefreshToken refreshToken = new RefreshToken();
-        refreshToken.setRefresh_token(rtoken);
 
-        retroClient.refreshToken(refreshToken, new RetroCallback() {
-            @Override
-            public void onError(Throwable t) {
-                Log.d(TAG, "refreshToken onError ");
-            }
-
-            @Override
-            public void onSuccess(int code, Object receiveData) {
-                Log.d(TAG, "refreshToken onSuccess :" + code);
-                LoginResponse loginResponse = (LoginResponse) receiveData;
-                if (loginResponse != null) {
-                    Log.d(TAG, "refreshToken result : " + loginResponse.toString());
-                    login(loginResponse);
-                }
-            }
-
-            @Override
-            public void onFail(int code, String message) {
-                Log.d(TAG, "onFail : " + code);
-                Log.d(TAG, "onFail : " + message);
-                Toast.makeText(getApplicationContext(), code + ":" + message, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 }

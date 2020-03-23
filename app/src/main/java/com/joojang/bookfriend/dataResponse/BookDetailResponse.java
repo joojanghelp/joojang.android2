@@ -18,6 +18,8 @@ public class BookDetailResponse extends DefaultResponse {
     public String isbn;
     public String publisher;
     public String thumbnail;
+    public boolean read_check;
+
     public ArrayList<BookReply> book_activity;
 
     public String getUuid() {
@@ -58,5 +60,9 @@ public class BookDetailResponse extends DefaultResponse {
 
     public ArrayList<BookReply> getBook_activity() {
         return book_activity;
+    }
+
+    public boolean isRead_check() {
+        return read_check;
     }
 }

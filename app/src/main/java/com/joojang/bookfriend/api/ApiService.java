@@ -7,10 +7,12 @@ import com.joojang.bookfriend.dataResponse.JoinResponse;
 import com.joojang.bookfriend.dataResponse.LoginResponse;
 import com.joojang.bookfriend.dataResponse.BookListResponse;
 import com.joojang.bookfriend.dataResponse.SettingInfoResponse;
+import com.joojang.bookfriend.model.ActivityState;
 import com.joojang.bookfriend.model.Book;
 import com.joojang.bookfriend.model.BookReply;
 import com.joojang.bookfriend.model.JoinUser;
 import com.joojang.bookfriend.model.LoginUser;
+import com.joojang.bookfriend.model.ReadState;
 import com.joojang.bookfriend.model.RefreshToken;
 
 import retrofit2.Call;
@@ -43,14 +45,14 @@ public interface ApiService {
     @POST(Base_URL_PATH + "/auth/register")
     Call<JoinResponse> register(@Body JoinUser joinUser);
 
-    @GET(Base_URL_PATH + "/user/books")
-    Call<BookListResponse> getUserBooks();
+    @GET(Base_URL_PATH + "/user/books/page/{page}")
+    Call<BookListResponse> getUserBooks(@Path("page") int page);
 
     @POST(Base_URL_PATH + "/user/books")
     Call<DefaultResponse> registerBook(@Body Book book);
 
-    @GET(Base_URL_PATH + "/books/recommend")
-    Call<BookListResponse> getRecommendBooks();
+    @GET(Base_URL_PATH + "/books/recommend/page/{page}")
+    Call<BookListResponse> getRecommendBooks(@Path("page") int page );
 
     @GET(Base_URL_PATH + "/books/{book_id}/detail")
     Call<BookDetailResponse> getBookDetail(@Path("book_id")int book_id);
@@ -60,5 +62,11 @@ public interface ApiService {
 
     @GET(Base_URL_PATH + "/user/setting")
     Call<SettingInfoResponse> getSettingInfo();
+
+    @POST(Base_URL_PATH + "/user/setting/activity_state")
+    Call<DefaultResponse> changeActivityState(@Body ActivityState activityState);
+
+    @POST(Base_URL_PATH + "/user/books/recommend/read")
+    Call<DefaultResponse> changeReadState(@Body ReadState readState);
 
 }

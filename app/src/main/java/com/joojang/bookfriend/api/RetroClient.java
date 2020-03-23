@@ -13,10 +13,12 @@ import com.joojang.bookfriend.dataResponse.JoinResponse;
 import com.joojang.bookfriend.dataResponse.LoginResponse;
 import com.joojang.bookfriend.dataResponse.BookListResponse;
 import com.joojang.bookfriend.dataResponse.SettingInfoResponse;
+import com.joojang.bookfriend.model.ActivityState;
 import com.joojang.bookfriend.model.Book;
 import com.joojang.bookfriend.model.BookReply;
 import com.joojang.bookfriend.model.JoinUser;
 import com.joojang.bookfriend.model.LoginUser;
+import com.joojang.bookfriend.model.ReadState;
 import com.joojang.bookfriend.model.RefreshToken;
 import com.joojang.bookfriend.utils.Util;
 
@@ -156,7 +158,7 @@ public class RetroClient {
                 }else{
                     Log.d( "RetroClient","onResponse not success : "+response.code());
                     Log.d( "RetroClient","onResponse not success : "+response.message());
-                    callback.onFail(response.code(),response.message());
+                    callback.onFail(response.code(),response.body().getMessage());
                 }
             }
 
@@ -179,7 +181,7 @@ public class RetroClient {
                 }else{
                     Log.d( "RetroClient","onResponse not success : "+response.code());
                     Log.d( "RetroClient","onResponse not success : "+response.message());
-                    callback.onFail(response.code(),response.message());
+                    callback.onFail(response.code(),response.body().getMessage());
                 }
             }
 
@@ -202,7 +204,7 @@ public class RetroClient {
                 }else{
                     Log.d( "RetroClient","onResponse not success : "+response.code());
                     Log.d( "RetroClient","onResponse not success : "+response.message());
-                    callback.onFail(response.code(),response.message());
+                    callback.onFail(response.code(),response.body().getMessage());
                 }
             }
 
@@ -214,8 +216,8 @@ public class RetroClient {
         });
     }
 
-    public void getUserBooks(final RetroCallback callback) {
-        apiService.getUserBooks().enqueue(new Callback<BookListResponse>() {
+    public void getUserBooks(int page , final RetroCallback callback) {
+        apiService.getUserBooks(page ).enqueue(new Callback<BookListResponse>() {
             @Override
             public void onResponse(Call<BookListResponse> call, Response<BookListResponse> response) {
                 Log.d( "RetroClient","onResponse : "+response);
@@ -226,7 +228,7 @@ public class RetroClient {
                 }else{
                     Log.d( "RetroClient","onResponse not success : "+response.code());
                     Log.d( "RetroClient","onResponse not success : "+response.message());
-                    callback.onFail(response.code(),response.message());
+                    callback.onFail(response.code(),response.body().getMessage());
                 }
             }
 
@@ -237,6 +239,7 @@ public class RetroClient {
             }
         });
     }
+
 
     public void registerBook(Book book, final RetroCallback callback) {
         apiService.registerBook(book).enqueue(new Callback<DefaultResponse>() {
@@ -249,7 +252,14 @@ public class RetroClient {
                 }else{
                     Log.d( "RetroClient","onResponse not success : "+response.code());
                     Log.d( "RetroClient","onResponse not success : "+response.message());
-                    callback.onFail(response.code(),response.message());
+                    DefaultResponse restError=null;
+                    try {
+                        restError = (DefaultResponse) retrofit.responseBodyConverter(DefaultResponse.class, DefaultResponse.class.getAnnotations()).convert(response.errorBody());
+                    }catch (IOException e){
+
+                    }
+
+                    callback.onFail(response.code(), restError.getMessage() );
                 }
             }
 
@@ -261,8 +271,8 @@ public class RetroClient {
         });
     }
 
-    public void getRecommendBooks(final RetroCallback callback) {
-        apiService.getRecommendBooks().enqueue(new Callback<BookListResponse>() {
+    public void getRecommendBooks(int page , final RetroCallback callback) {
+        apiService.getRecommendBooks(page ).enqueue(new Callback<BookListResponse>() {
             @Override
             public void onResponse(Call<BookListResponse> call, Response<BookListResponse> response) {
                 Log.d( "RetroClient","onResponse : "+response);
@@ -273,7 +283,7 @@ public class RetroClient {
                 }else{
                     Log.d( "RetroClient","onResponse not success : "+response.code());
                     Log.d( "RetroClient","onResponse not success : "+response.message());
-                    callback.onFail(response.code(),response.message());
+                    callback.onFail(response.code(),response.body().getMessage());
                 }
             }
 
@@ -297,7 +307,7 @@ public class RetroClient {
                 }else{
                     Log.d( "RetroClient","onResponse not success : "+response.code());
                     Log.d( "RetroClient","onResponse not success : "+response.message());
-                    callback.onFail(response.code(),response.message());
+                    callback.onFail(response.code(),response.body().getMessage());
                 }
             }
 
@@ -320,7 +330,7 @@ public class RetroClient {
                 }else{
                     Log.d( "RetroClient","onResponse not success : "+response.code());
                     Log.d( "RetroClient","onResponse not success : "+response.message());
-                    callback.onFail(response.code(),response.message());
+                    callback.onFail(response.code(),response.body().getMessage());
                 }
             }
 
@@ -344,12 +354,58 @@ public class RetroClient {
                 }else{
                     Log.d( "RetroClient","onResponse not success : "+response.code());
                     Log.d( "RetroClient","onResponse not success : "+response.message());
-                    callback.onFail(response.code(),response.message());
+                    callback.onFail(response.code(),response.body().getMessage());
                 }
             }
 
             @Override
             public void onFailure(Call<SettingInfoResponse> call, Throwable t) {
+                Log.d( "RetroClient","onFailure :"+t.getMessage());
+                callback.onError(t);
+            }
+        });
+    }
+
+    public void changeActivityState(ActivityState activityState, final RetroCallback callback) {
+        apiService.changeActivityState(activityState).enqueue(new Callback<DefaultResponse>() {
+            @Override
+            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+                Log.d( "RetroClient","onResponse : "+response);
+                if (response.isSuccessful()) {
+                    String result = response.body().toString();
+                    callback.onSuccess(response.code(), response.body());
+                }else{
+                    Log.d( "RetroClient","onResponse not success : "+response.code());
+                    Log.d( "RetroClient","onResponse not success : "+response.message());
+                    callback.onFail(response.code(),response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DefaultResponse> call, Throwable t) {
+                Log.d( "RetroClient","onFailure :"+t.getMessage());
+                callback.onError(t);
+            }
+        });
+    }
+
+    public void changeReadState(ReadState readState, final RetroCallback callback) {
+        apiService.changeReadState(readState).enqueue(new Callback<DefaultResponse>() {
+            @Override
+            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+                Log.d( "RetroClient","onResponse : "+response);
+                if (response.isSuccessful()) {
+                    String result = response.body().toString();
+                    callback.onSuccess(response.code(), response.body());
+                }else{
+                    Log.d( "RetroClient","onResponse not success : "+response.code());
+                    Log.d( "RetroClient","onResponse not success : "+response.message());
+                    callback.onFail(response.code(),response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DefaultResponse> call, Throwable t) {
                 Log.d( "RetroClient","onFailure :"+t.getMessage());
                 callback.onError(t);
             }

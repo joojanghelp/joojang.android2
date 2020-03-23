@@ -63,6 +63,7 @@
                             android:id="@+id/img_readbook"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
+                            android:layout_marginLeft="@dimen/spacing_large"
                             android:scaleType="fitXY"
                             app:srcCompat="@drawable/ic_read_book" />
 

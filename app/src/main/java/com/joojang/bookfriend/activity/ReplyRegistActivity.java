@@ -23,7 +23,7 @@ public class ReplyRegistActivity extends AppCompatActivity {
 
     private final String TAG = ReplyRegistActivity.class.getSimpleName();
 
-    private int mSelectedItem = -1;
+    private int mSelectedItem = 0;
     private String mSelectedCode;
     private int mBook_id;
 

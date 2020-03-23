@@ -18,7 +18,9 @@ import com.joojang.bookfriend.api.RetroCallback;
 import com.joojang.bookfriend.api.RetroClient;
 import com.joojang.bookfriend.dataResponse.BookDetailResponse;
 import com.joojang.bookfriend.dataResponse.BookListResponse;
+import com.joojang.bookfriend.dataResponse.DefaultResponse;
 import com.joojang.bookfriend.model.BookReply;
+import com.joojang.bookfriend.model.ReadState;
 import com.joojang.bookfriend.utils.Tools;
 import com.joojang.bookfriend.widget.SpacingItemDecoration;
 
@@ -35,9 +37,13 @@ public class BookDetailActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private AdapterListBookReply mAdapter;
 
-    private TextView tv_content,tv_author, tv_publisher, tv_ActionBarTitle ;
+    private TextView tv_content,tv_author, tv_publisher, tv_book_title ;
+
+    private Button btn_read_check;
+    private boolean read_check;
 
     private int mBook_id;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +72,7 @@ public class BookDetailActivity extends AppCompatActivity {
 
     private void initComponent(){
 
-        tv_ActionBarTitle = findViewById(R.id.tv_ActionBarTitle);
+        tv_book_title = findViewById(R.id.tv_book_title);
         tv_author = findViewById(R.id.tv_author);
         tv_publisher = findViewById(R.id.tv_publisher);
         tv_content = findViewById(R.id.tv_content);
@@ -78,6 +84,8 @@ public class BookDetailActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(mAdapter);
 
+        btn_read_check = findViewById(R.id.btn_read_check);
+
         Button btn_replay_regist = findViewById(R.id.btn_re_write);
         btn_replay_regist.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +96,12 @@ public class BookDetailActivity extends AppCompatActivity {
             }
         });
 
+        btn_read_check.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                proc_readState();
+            }
+        });
 
     }
 
@@ -121,15 +135,81 @@ public class BookDetailActivity extends AppCompatActivity {
         ImageView image = findViewById(R.id.image);
         Tools.displayImageOriginal(this,image,bookDetailResponse.getThumbnail());
 
-        tv_ActionBarTitle.setText( bookDetailResponse.getTitle() );
+        tv_book_title.setText( bookDetailResponse.getTitle() );
         tv_author.setText( bookDetailResponse.getAuthors() );
         tv_publisher.setText( bookDetailResponse.getPublisher() );
         tv_content.setText( bookDetailResponse.getContents() );
 
+        if ( bookDetailResponse.getBook_activity() != null ) {
+            items.clear();
+            items.addAll(bookDetailResponse.getBook_activity());
+            mAdapter.notifyDataSetChanged();
+        }
 
-        items.addAll(bookDetailResponse.getBook_activity());
-        mAdapter.notifyDataSetChanged();
+        changeReadState(bookDetailResponse.isRead_check());
 
+    }
+
+    private void proc_readState(){
+
+        ReadState readState = new ReadState();
+        readState.setBook_id(mBook_id);
+
+        retroClient.changeReadState(readState , new RetroCallback() {
+            @Override
+            public void onError(Throwable t) {
+                Log.d(TAG, "proc_readState onError ");
+            }
+
+            @Override
+            public void onSuccess(int code, Object receiveData) {
+                Log.d(TAG, "proc_readState onSuccess :"+code);
+                DefaultResponse defaultResponse = (DefaultResponse) receiveData;
+                if (defaultResponse != null) {
+                    changeReadState(true);
+                }
+            }
+
+            @Override
+            public void onFail(int code, String message) {
+                Log.d( TAG,"onFail : "+code);
+                Log.d( TAG,"onFail : "+message);
+            }
+        });
+    }
+
+    private void changeReadState(boolean read_check){
+
+        this.read_check = read_check;
+
+        if ( read_check ) {
+            btn_read_check.setEnabled(false);
+            btn_read_check.setText("읽었음");
+            btn_read_check.setBackgroundResource(R.drawable.btn_rect_grey_black);
+        }else{
+            btn_read_check.setEnabled(true);
+            btn_read_check.setText("읽음");
+            btn_read_check.setBackgroundResource(R.drawable.btn_rect_primary);
+        }
+
+    }
+
+    @Override
+    public void finish() {
+
+        String check="N";
+        if ( this.read_check ){
+            check = "Y";
+        }else{
+            check = "N";
+        }
+
+        Intent intent = new Intent();
+        intent.putExtra("book_id", mBook_id);
+        intent.putExtra("read_state", check);
+        setResult(RESULT_OK, intent);
+
+        super.finish();
     }
 
 }

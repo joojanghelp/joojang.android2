@@ -1,6 +1,8 @@
 package com.joojang.bookfriend.activity;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +19,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.zxing.BarcodeFormat;
@@ -61,6 +65,8 @@ public class BookRegistFragment extends Fragment implements View.OnClickListener
 
     private ZXingScannerView mScannerView;
 
+    private ViewGroup rootView;
+
     @Override
     public void onAttach(@NonNull Context context) {
         this.mContext = context;
@@ -75,7 +81,7 @@ public class BookRegistFragment extends Fragment implements View.OnClickListener
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_book_regist, container, false);
+        rootView = (ViewGroup) inflater.inflate(R.layout.fragment_book_regist, container, false);
 
         retroClientKakao = RetroClientKakao.getInstance(getActivity()).createBaseApi();
         retroClient = RetroClient.getInstance(getActivity()).createBaseApi();
@@ -98,13 +104,7 @@ public class BookRegistFragment extends Fragment implements View.OnClickListener
         ll_search_book.setVisibility(View.GONE);
         bt_regist.setVisibility(View.GONE);
 
-        FrameLayout cameraLayout = (FrameLayout) rootView.findViewById(R.id.fl_camera_layout);
-        mScannerView = new ZXingScannerView(getActivity());
-        List<BarcodeFormat> formats = new ArrayList<>();
-        formats.add(BarcodeFormat.EAN_13);
-        formats.add(BarcodeFormat.EAN_8);
-        mScannerView.setFormats(formats);
-        cameraLayout.addView(mScannerView);
+        camera_permission();
 
         return rootView;
     }
@@ -112,14 +112,18 @@ public class BookRegistFragment extends Fragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
-        mScannerView.setResultHandler(this);
-        mScannerView.startCamera();
+        if ( mScannerView != null ) {
+            mScannerView.setResultHandler(this);
+            mScannerView.startCamera();
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mScannerView.stopCamera();
+        if ( mScannerView != null ) {
+            mScannerView.stopCamera();
+        }
     }
 
     @Override
@@ -127,7 +131,7 @@ public class BookRegistFragment extends Fragment implements View.OnClickListener
         switch (view.getId()) {
             case R.id.bt_search:
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow( et_isbn.getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(et_isbn.getWindowToken(), 0);
                 proc_bookSearch();
                 break;
 
@@ -199,10 +203,12 @@ public class BookRegistFragment extends Fragment implements View.OnClickListener
         }
         Tools.displayImageOriginal(mContext, image_searchbook, mImage_url);
 
-        mScannerView.resumeCameraPreview(this);
+        if ( mScannerView != null ) {
+            mScannerView.resumeCameraPreview(this);
+        }
     }
 
-    private void reset(){
+    private void reset() {
         ll_search_book.setVisibility(View.GONE);
         bt_regist.setVisibility(View.GONE);
 
@@ -211,7 +217,7 @@ public class BookRegistFragment extends Fragment implements View.OnClickListener
         et_publisher.setText("");
         tv_content.setText("");
         Tools.displayImageOriginal(mContext, image_searchbook, null);
-        mImage_url="";
+        mImage_url = "";
     }
 
     @Override
@@ -228,7 +234,7 @@ public class BookRegistFragment extends Fragment implements View.OnClickListener
         proc_bookSearch();
     }
 
-    private void proc_bookRegist(){
+    private void proc_bookRegist() {
 
         String uuid = et_isbn.getText().toString().trim();
         String authors = et_author.getText().toString().trim();
@@ -239,13 +245,13 @@ public class BookRegistFragment extends Fragment implements View.OnClickListener
         String title = et_title.getText().toString().trim();
 
         Book book = new Book();
-        book.setUuid( uuid );
-        book.setAuthors( authors );
-        book.setContents( contents );
-        book.setIsbn( isbn );
-        book.setPublisher( publisher );
-        book.setThumbnail( thumbnail );
-        book.setTitle( title );
+        book.setUuid(uuid);
+        book.setAuthors(authors);
+        book.setContents(contents);
+        book.setIsbn(isbn);
+        book.setPublisher(publisher);
+        book.setThumbnail(thumbnail);
+        book.setTitle(title);
 
         retroClient.registerBook(book, new RetroCallback() {
             @Override
@@ -259,11 +265,12 @@ public class BookRegistFragment extends Fragment implements View.OnClickListener
 
                 DefaultResponse defaultResponse = (DefaultResponse) receiveData;
 
-                if ( code == 201 ) {
-                    Log.d(TAG, "defaultResponse result : " + defaultResponse.getMessage() );
+                if (code == 201) {
+                    Log.d(TAG, "defaultResponse result : " + defaultResponse.getMessage());
+                    Toast.makeText(getActivity(), "등록 되었습니다.", Toast.LENGTH_SHORT).show();
                     reset();
-                }else{
-                    Log.d(TAG, "defaultResponse result : " + code );
+                } else {
+                    Log.d(TAG, "defaultResponse result : " + code);
                 }
             }
 
@@ -271,10 +278,49 @@ public class BookRegistFragment extends Fragment implements View.OnClickListener
             public void onFail(int code, String message) {
                 Log.d(TAG, "onFail : " + code);
                 Log.d(TAG, "onFail : " + message);
-                Toast.makeText(getActivity(),message,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                 reset();
             }
         });
 
+    }
+
+    private void camera_permission() {
+
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),Manifest.permission.CAMERA) ) {
+                Toast.makeText(getActivity(),"카메라 권한을 허용해주세요.",Toast.LENGTH_SHORT).show();
+            } else {
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.CAMERA},
+                        1);
+            }
+        }else{
+            initCamera();
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    initCamera();
+                } else {
+                    // 권한 거부
+                    // 사용자가 해당권한을 거부했을때 해주어야 할 동작을 수행합니다
+                }
+                return;
+        }
+    }
+
+    private void initCamera(){
+        FrameLayout cameraLayout = (FrameLayout) rootView.findViewById(R.id.fl_camera_layout);
+        mScannerView = new ZXingScannerView(getActivity());
+        List<BarcodeFormat> formats = new ArrayList<>();
+        formats.add(BarcodeFormat.EAN_13);
+        formats.add(BarcodeFormat.EAN_8);
+        mScannerView.setFormats(formats);
+        cameraLayout.addView(mScannerView);
     }
 }
