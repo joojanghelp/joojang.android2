@@ -158,7 +158,7 @@ public class RetroClient {
                 }else{
                     Log.d( "RetroClient","onResponse not success : "+response.code());
                     Log.d( "RetroClient","onResponse not success : "+response.message());
-                    callback.onFail(response.code(),response.body().getMessage());
+                    callback.onFail(response.code(),response.message());
                 }
             }
 
@@ -181,7 +181,7 @@ public class RetroClient {
                 }else{
                     Log.d( "RetroClient","onResponse not success : "+response.code());
                     Log.d( "RetroClient","onResponse not success : "+response.message());
-                    callback.onFail(response.code(),response.body().getMessage());
+                    callback.onFail(response.code(),response.message());
                 }
             }
 
@@ -204,7 +204,7 @@ public class RetroClient {
                 }else{
                     Log.d( "RetroClient","onResponse not success : "+response.code());
                     Log.d( "RetroClient","onResponse not success : "+response.message());
-                    callback.onFail(response.code(),response.body().getMessage());
+                    callback.onFail(response.code(),response.message());
                 }
             }
 
@@ -228,7 +228,7 @@ public class RetroClient {
                 }else{
                     Log.d( "RetroClient","onResponse not success : "+response.code());
                     Log.d( "RetroClient","onResponse not success : "+response.message());
-                    callback.onFail(response.code(),response.body().getMessage());
+                    callback.onFail(response.code(),response.message());
                 }
             }
 
@@ -283,7 +283,7 @@ public class RetroClient {
                 }else{
                     Log.d( "RetroClient","onResponse not success : "+response.code());
                     Log.d( "RetroClient","onResponse not success : "+response.message());
-                    callback.onFail(response.code(),response.body().getMessage());
+                    callback.onFail(response.code(),response.message());
                 }
             }
 
@@ -307,7 +307,7 @@ public class RetroClient {
                 }else{
                     Log.d( "RetroClient","onResponse not success : "+response.code());
                     Log.d( "RetroClient","onResponse not success : "+response.message());
-                    callback.onFail(response.code(),response.body().getMessage());
+                    callback.onFail(response.code(),response.message());
                 }
             }
 
@@ -330,7 +330,7 @@ public class RetroClient {
                 }else{
                     Log.d( "RetroClient","onResponse not success : "+response.code());
                     Log.d( "RetroClient","onResponse not success : "+response.message());
-                    callback.onFail(response.code(),response.body().getMessage());
+                    callback.onFail(response.code(),response.message());
                 }
             }
 
@@ -354,7 +354,7 @@ public class RetroClient {
                 }else{
                     Log.d( "RetroClient","onResponse not success : "+response.code());
                     Log.d( "RetroClient","onResponse not success : "+response.message());
-                    callback.onFail(response.code(),response.body().getMessage());
+                    callback.onFail(response.code(),response.message());
                 }
             }
 
@@ -377,7 +377,7 @@ public class RetroClient {
                 }else{
                     Log.d( "RetroClient","onResponse not success : "+response.code());
                     Log.d( "RetroClient","onResponse not success : "+response.message());
-                    callback.onFail(response.code(),response.body().getMessage());
+                    callback.onFail(response.code(),response.message());
                 }
             }
 
@@ -400,7 +400,7 @@ public class RetroClient {
                 }else{
                     Log.d( "RetroClient","onResponse not success : "+response.code());
                     Log.d( "RetroClient","onResponse not success : "+response.message());
-                    callback.onFail(response.code(),response.body().getMessage());
+                    callback.onFail(response.code(),response.message());
                 }
             }
 
