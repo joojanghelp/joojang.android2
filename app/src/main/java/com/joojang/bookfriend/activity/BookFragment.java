@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.joojang.bookfriend.BaseApplication;
 import com.joojang.bookfriend.R;
-import com.joojang.bookfriend.adapter.AdapterGridTwoLineLight;
+import com.joojang.bookfriend.adapter.AdapterListRecommBook;
 import com.joojang.bookfriend.api.RetroCallback;
 import com.joojang.bookfriend.api.RetroClient;
 import com.joojang.bookfriend.dataResponse.BookListResponse;
@@ -36,7 +36,7 @@ public class BookFragment extends Fragment {
     private Context mContext;
 
     private RecyclerView recyclerView;
-    private AdapterGridTwoLineLight mAdapter;
+    private AdapterListRecommBook mAdapter;
 
     private ArrayList<Book> items = new ArrayList<>();
 
@@ -66,7 +66,7 @@ public class BookFragment extends Fragment {
 
     private void initComponent() {
 
-        mAdapter = new AdapterGridTwoLineLight(getActivity(), items);
+        mAdapter = new AdapterListRecommBook(getActivity(), items);
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
@@ -75,7 +75,7 @@ public class BookFragment extends Fragment {
         recyclerView.setAdapter(mAdapter);
 
         // on item list clicked
-        mAdapter.setOnItemClickListener(new AdapterGridTwoLineLight.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new AdapterListRecommBook.OnItemClickListener() {
             @Override
             public void onItemClick(View view, Book obj, int position) {
                 Intent intent = new Intent( mContext , BookDetailActivity.class);

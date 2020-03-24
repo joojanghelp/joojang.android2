@@ -1,20 +1,34 @@
 package com.joojang.bookfriend;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.multidex.MultiDexApplication;
 
+import com.joojang.bookfriend.api.RetroCallback;
+import com.joojang.bookfriend.api.RetroClient;
+import com.joojang.bookfriend.dataResponse.RecommGubunResponse;
+import com.joojang.bookfriend.model.RecommGubun;
+
+import java.util.ArrayList;
 import java.util.Date;
 
 public class BaseApplication extends MultiDexApplication {
 
+    private final String TAG = BaseApplication.class.getSimpleName();
+
     private static BaseApplication mInstance;
     public static Context context;
+
+    private RetroClient retroClient;
 
     public String LOGINTOKEN;
     public String REFRESHTOKEN;
     public int EXPIRES_IN;
     public Date LOGINDATE;
+
+    // 그룹구분
+    public ArrayList<RecommGubun> RECOMMGUBUN;
 
     public static synchronized BaseApplication getInstance() {
         return mInstance;
@@ -25,6 +39,7 @@ public class BaseApplication extends MultiDexApplication {
         super.onCreate();
         mInstance = this;
         context = this.getApplicationContext();
+        retroClient = RetroClient.getInstance(context).createBaseApi();
     }
 
     public String getLOGINTOKEN() {
@@ -63,4 +78,21 @@ public class BaseApplication extends MultiDexApplication {
     public void setLOGINDATE(Date LOGINDATE) {
         this.LOGINDATE = LOGINDATE;
     }
+
+    public String[] gubun_code(){
+        String[] result = new String[RECOMMGUBUN.size()];
+        for(int i=0 ; i<RECOMMGUBUN.size();i++){
+            result[i] = RECOMMGUBUN.get(i).getCode_id();
+        }
+        return result;
+    }
+
+    public String[] gubun_name(){
+        String[] result = new String[RECOMMGUBUN.size()];
+        for(int i=0 ; i<RECOMMGUBUN.size();i++){
+            result[i] = RECOMMGUBUN.get(i).getCode_name();
+        }
+        return result;
+    }
+
 }

@@ -13,10 +13,12 @@ import com.joojang.bookfriend.R;
 import com.joojang.bookfriend.api.RetroCallback;
 import com.joojang.bookfriend.api.RetroClient;
 import com.joojang.bookfriend.dataResponse.LoginResponse;
+import com.joojang.bookfriend.dataResponse.RecommGubunResponse;
 import com.joojang.bookfriend.model.RefreshToken;
 import com.joojang.bookfriend.utils.Tools;
 import com.joojang.bookfriend.utils.Util;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Splash extends AppCompatActivity {
@@ -87,11 +89,43 @@ public class Splash extends AppCompatActivity {
             Util.saveAccessTokenPreferences(this, loginResponse.getAccess_token());
             Util.saveRefreshTokenPreferences(this, loginResponse.getRefresh_token());
 
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(intent);
-            finish();
+            proc_getRecommGubun();
+
+
 
         }
 
+    }
+
+    private void proc_getRecommGubun(){
+        Log.d(TAG,"proc_getRecommGubun");
+        retroClient.getRecommGubun("B11" , new RetroCallback() {
+            @Override
+            public void onError(Throwable t) {
+                Log.d(TAG, "proc_getRecommGubun onError ");
+            }
+
+            @Override
+            public void onSuccess(int code, Object receiveData) {
+                Log.d(TAG, "proc_getRecommGubun onSuccess :"+code);
+                RecommGubunResponse recommGubunResponse = (RecommGubunResponse) receiveData;
+                if (recommGubunResponse != null) {
+                    Log.d(TAG, "proc_getRecommGubun result size: " + recommGubunResponse.getItems().size() );
+                    BaseApplication.getInstance().RECOMMGUBUN = new ArrayList<>();
+                    BaseApplication.getInstance().RECOMMGUBUN.addAll(recommGubunResponse.getItems());
+
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    finish();
+
+                }
+            }
+
+            @Override
+            public void onFail(int code, String message) {
+                Log.d( TAG,"onFail : "+code);
+                Log.d( TAG,"onFail : "+message);
+            }
+        });
     }
 }

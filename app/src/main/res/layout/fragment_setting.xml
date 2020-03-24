@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
@@ -86,69 +87,94 @@
         android:layout_marginTop="40dp"
         android:background="@color/grey_10" />
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="40dp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:padding="@dimen/spacing_large">
 
-        <View
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="40dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="내가 읽은 책"
-            android:textAlignment="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-            android:textColor="@color/blue_grey_800"
-            android:textStyle="bold" />
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_setting_readbooks"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:textColor="@color/blue_grey_300"
-            android:theme="@style/EditText.Grey" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="20dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="독서 활동 등록 수"
-            android:textAlignment="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-            android:textColor="@color/blue_grey_800"
-            android:textStyle="bold" />
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_setting_replybooks"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:textColor="@color/blue_grey_300"
-            android:theme="@style/EditText.Grey" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="40dp" />
-
-        <TextView
-            android:id="@+id/tv_logout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
+            android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:text="로그아웃"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-            android:textColor="@color/colorPrimary"
-            android:textStyle="bold" />
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="내가 읽은 책"
+                android:textAlignment="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textColor="@color/blue_grey_800"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="6dp" />
+
+            <TextView
+                android:id="@+id/tv_setting_readbooks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                android:textColor="@color/blue_grey_800"
+                android:textStyle="bold"
+                tool:text="10" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="독서 활동 등록 수"
+                android:textAlignment="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textColor="@color/blue_grey_800"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="6dp" />
+
+            <TextView
+                android:id="@+id/tv_setting_replybooks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                android:textColor="@color/blue_grey_800"
+                android:textStyle="bold"
+                tool:text="10" />
+        </LinearLayout>
+
+
     </LinearLayout>
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="40dp" />
+
+    <TextView
+        android:id="@+id/tv_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:gravity="center_horizontal"
+        android:text="로그아웃"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold" />
 </LinearLayout>

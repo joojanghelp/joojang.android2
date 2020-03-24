@@ -23,13 +23,22 @@ public class AdapterListBookReply extends RecyclerView.Adapter<RecyclerView.View
 
     private Context ctx;
     private OnItemClickListener mOnItemClickListener;
+    private OnItemLongClickListener mOnItemLongClickListener;
 
     public interface OnItemClickListener {
         void onItemClick(View view, BookReply obj, int position);
     }
 
+    public interface OnItemLongClickListener {
+        void onItemLongClick(View view, BookReply obj, int position);
+    }
+
     public void setOnItemClickListener(final OnItemClickListener mItemClickListener) {
         this.mOnItemClickListener = mItemClickListener;
+    }
+
+    public void setOnItemLongClickListener(final OnItemLongClickListener mItemLongClickListener) {
+        this.mOnItemLongClickListener = mItemLongClickListener;
     }
 
     public AdapterListBookReply(Context context, List<BookReply> items) {
@@ -84,6 +93,17 @@ public class AdapterListBookReply extends RecyclerView.Adapter<RecyclerView.View
                         mOnItemClickListener.onItemClick(view, items.get(position), position);
                     }
                 }
+            });
+
+            view.lyt_parent.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    if (mOnItemLongClickListener != null) {
+                        mOnItemLongClickListener.onItemLongClick(view, items.get(position), position);
+                    }
+                    return false;
+                }
+
             });
         }
     }

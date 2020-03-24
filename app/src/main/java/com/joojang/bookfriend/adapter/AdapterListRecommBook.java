@@ -1,6 +1,7 @@
 package com.joojang.bookfriend.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,16 +10,19 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+
 import com.joojang.bookfriend.R;
 import com.joojang.bookfriend.model.Book;
 import com.joojang.bookfriend.utils.Tools;
 
-
+import java.util.ArrayList;
 import java.util.List;
 
-public class AdapterListBasic extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AdapterListRecommBook extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<Book> items;
+    private ArrayList<Book> items;
+
+    private OnLoadMoreListener onLoadMoreListener;
 
     private Context ctx;
     private OnItemClickListener mOnItemClickListener;
@@ -31,35 +35,22 @@ public class AdapterListBasic extends RecyclerView.Adapter<RecyclerView.ViewHold
         this.mOnItemClickListener = mItemClickListener;
     }
 
-    public AdapterListBasic(Context context, List<Book> items) {
+    public AdapterListRecommBook(Context context, ArrayList<Book> items) {
         this.items = items;
         ctx = context;
     }
 
     public class OriginalViewHolder extends RecyclerView.ViewHolder {
         public ImageView image;
-        public ImageView img_readbook;
-
-        public TextView tv_title;
-        public TextView tv_author;
-        public TextView tv_content;
-        public TextView tv_publisher;
-
-
+        public TextView name;
+        public TextView brief;
         public View lyt_parent;
-
-
 
         public OriginalViewHolder(View v) {
             super(v);
             image = (ImageView) v.findViewById(R.id.image);
-            img_readbook = (ImageView) v.findViewById(R.id.img_readbook);
-
-            tv_title = (TextView) v.findViewById(R.id.tv_title);
-            tv_author = (TextView) v.findViewById(R.id.tv_author);
-            tv_content = (TextView) v.findViewById(R.id.tv_content);
-            tv_publisher = (TextView) v.findViewById(R.id.tv_publisher);
-
+            name = (TextView) v.findViewById(R.id.name);
+            brief = (TextView) v.findViewById(R.id.brief);
             lyt_parent = (View) v.findViewById(R.id.lyt_parent);
         }
     }
@@ -67,7 +58,7 @@ public class AdapterListBasic extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder vh;
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_grid_image_one_line_light, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_grid_image_two_line_light, parent, false);
         vh = new OriginalViewHolder(v);
         return vh;
     }
@@ -75,24 +66,12 @@ public class AdapterListBasic extends RecyclerView.Adapter<RecyclerView.ViewHold
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        Book obj = items.get(position);
         if (holder instanceof OriginalViewHolder) {
             OriginalViewHolder view = (OriginalViewHolder) holder;
-
-            Book p = items.get(position);
-
-            view.tv_title.setText(p.getTitle());
-            view.tv_author.setText(p.getAuthors());
-            view.tv_publisher.setText(p.getPublisher());
-            view.tv_content.setText(p.getContents());
-
-            Tools.displayImageOriginal(ctx, view.image, p.getThumbnail());
-
-            if ( p.read_check ){
-                view.img_readbook.setVisibility(View.VISIBLE);
-            }else{
-                view.img_readbook.setVisibility(View.INVISIBLE);
-            }
-
+            view.name.setText(obj.getTitle());
+            view.brief.setText(obj.getAuthors());
+            Tools.displayImageOriginal(ctx, view.image, obj.getThumbnail());
             view.lyt_parent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -104,9 +83,22 @@ public class AdapterListBasic extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
+
     @Override
     public int getItemCount() {
         return items.size();
+    }
+
+    public Book getItem(int position) {
+        return items.get(position);
+    }
+
+    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
+        this.onLoadMoreListener = onLoadMoreListener;
+    }
+
+    public interface OnLoadMoreListener {
+        void onLoadMore(int current_page);
     }
 
 }

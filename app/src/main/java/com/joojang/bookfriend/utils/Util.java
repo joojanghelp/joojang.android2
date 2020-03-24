@@ -1,7 +1,11 @@
 package com.joojang.bookfriend.utils;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+
+import androidx.appcompat.app.AlertDialog;
+
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -57,4 +61,32 @@ public class Util {
         editor.commit();
     }
 
+    // 값 불러오기
+    public static String getGubunPreferences(Context context) {
+        SharedPreferences pref = context.getSharedPreferences("pref", MODE_PRIVATE);
+        String value  = pref.getString("gubun", "");
+        return value;
+    }
+
+    // 값 저장하기
+    public static void saveGubunPreferences(Context context, String value) {
+        SharedPreferences pref = context.getSharedPreferences("pref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("gubun", value ) ;
+        editor.commit();
+    }
+
+    public static void showConfirmDialog(Context context, String title, String message , final ConfirmDialogCallback callback) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                callback.resultConfirmDialog(true);
+            }
+        });
+        builder.setNegativeButton("취소", null);
+        builder.show();
+    }
 }

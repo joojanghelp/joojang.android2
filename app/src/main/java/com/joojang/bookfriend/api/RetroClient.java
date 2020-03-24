@@ -12,8 +12,9 @@ import com.joojang.bookfriend.dataResponse.DefaultResponse;
 import com.joojang.bookfriend.dataResponse.JoinResponse;
 import com.joojang.bookfriend.dataResponse.LoginResponse;
 import com.joojang.bookfriend.dataResponse.BookListResponse;
+import com.joojang.bookfriend.dataResponse.RecommGubunResponse;
 import com.joojang.bookfriend.dataResponse.SettingInfoResponse;
-import com.joojang.bookfriend.model.ActivityState;
+import com.joojang.bookfriend.model.ActivitySetting;
 import com.joojang.bookfriend.model.Book;
 import com.joojang.bookfriend.model.BookReply;
 import com.joojang.bookfriend.model.JoinUser;
@@ -25,7 +26,6 @@ import com.joojang.bookfriend.utils.Util;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.Map;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -271,8 +271,8 @@ public class RetroClient {
         });
     }
 
-    public void getRecommendBooks(int page , final RetroCallback callback) {
-        apiService.getRecommendBooks(page ).enqueue(new Callback<BookListResponse>() {
+    public void getRecommendBooks(String mSelectedCode,int page , final RetroCallback callback) {
+        apiService.getRecommendBooks(mSelectedCode,page ).enqueue(new Callback<BookListResponse>() {
             @Override
             public void onResponse(Call<BookListResponse> call, Response<BookListResponse> response) {
                 Log.d( "RetroClient","onResponse : "+response);
@@ -366,8 +366,8 @@ public class RetroClient {
         });
     }
 
-    public void changeActivityState(ActivityState activityState, final RetroCallback callback) {
-        apiService.changeActivityState(activityState).enqueue(new Callback<DefaultResponse>() {
+    public void changeActivityState(ActivitySetting activitySetting, final RetroCallback callback) {
+        apiService.changeActivityState(activitySetting).enqueue(new Callback<DefaultResponse>() {
             @Override
             public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
                 Log.d( "RetroClient","onResponse : "+response);
@@ -411,4 +411,75 @@ public class RetroClient {
             }
         });
     }
+
+    public void deleteReadState(ReadState readState, final RetroCallback callback) {
+        apiService.deleteReadState(readState).enqueue(new Callback<DefaultResponse>() {
+            @Override
+            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+                Log.d( "RetroClient","onResponse : "+response);
+                if (response.isSuccessful()) {
+                    String result = response.body().toString();
+                    callback.onSuccess(response.code(), response.body());
+                }else{
+                    Log.d( "RetroClient","onResponse not success : "+response.code());
+                    Log.d( "RetroClient","onResponse not success : "+response.message());
+                    callback.onFail(response.code(),response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DefaultResponse> call, Throwable t) {
+                Log.d( "RetroClient","onFailure :"+t.getMessage());
+                callback.onError(t);
+            }
+        });
+    }
+
+    public void getRecommGubun(String group, final RetroCallback callback) {
+        apiService.getRecommGubun(group).enqueue(new Callback<RecommGubunResponse>() {
+            @Override
+            public void onResponse(Call<RecommGubunResponse> call, Response<RecommGubunResponse> response) {
+                Log.d( "RetroClient","onResponse : "+response);
+                if (response.isSuccessful()) {
+                    String result = response.body().toString();
+                    callback.onSuccess(response.code(), response.body());
+                }else{
+                    Log.d( "RetroClient","onResponse not success : "+response.code());
+                    Log.d( "RetroClient","onResponse not success : "+response.message());
+                    callback.onFail(response.code(),response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RecommGubunResponse> call, Throwable t) {
+                Log.d( "RetroClient","onFailure :"+t.getMessage());
+                callback.onError(t);
+            }
+        });
+    }
+
+    public void deleteActivity(ActivitySetting activitySetting, final RetroCallback callback) {
+        apiService.deleteActivity(activitySetting).enqueue(new Callback<DefaultResponse>() {
+            @Override
+            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+                Log.d( "RetroClient","onResponse : "+response);
+                if (response.isSuccessful()) {
+                    String result = response.body().toString();
+                    callback.onSuccess(response.code(), response.body());
+                }else{
+                    Log.d( "RetroClient","onResponse not success : "+response.code());
+                    Log.d( "RetroClient","onResponse not success : "+response.message());
+                    callback.onFail(response.code(),response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DefaultResponse> call, Throwable t) {
+                Log.d( "RetroClient","onFailure :"+t.getMessage());
+                callback.onError(t);
+            }
+        });
+    }
+
+
 }

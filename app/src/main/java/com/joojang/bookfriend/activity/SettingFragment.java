@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,14 +20,11 @@ import com.joojang.bookfriend.BaseApplication;
 import com.joojang.bookfriend.R;
 import com.joojang.bookfriend.api.RetroCallback;
 import com.joojang.bookfriend.api.RetroClient;
-import com.joojang.bookfriend.dataResponse.BookDetailResponse;
 import com.joojang.bookfriend.dataResponse.DefaultResponse;
 import com.joojang.bookfriend.dataResponse.SettingInfoResponse;
 import com.joojang.bookfriend.login.LoginActivity;
-import com.joojang.bookfriend.model.ActivityState;
+import com.joojang.bookfriend.model.ActivitySetting;
 import com.joojang.bookfriend.utils.Util;
-
-import java.util.Date;
 
 public class SettingFragment extends Fragment {
 
@@ -36,7 +32,8 @@ public class SettingFragment extends Fragment {
     private RetroClient retroClient;
 
     private ViewGroup rootView;
-    private TextInputEditText et_setting_replybooks, et_setting_readbooks, et_setting_name;
+    private TextInputEditText et_setting_name;
+    private TextView tv_setting_replybooks, tv_setting_readbooks;
     private SwitchCompat switch_state;
     private TextView tv_logout;
 
@@ -65,8 +62,8 @@ public class SettingFragment extends Fragment {
 
     private void initComponent(){
         et_setting_name = rootView.findViewById(R.id.et_setting_name);
-        et_setting_readbooks = rootView.findViewById(R.id.et_setting_readbooks);
-        et_setting_replybooks = rootView.findViewById(R.id.et_setting_replybooks);
+        tv_setting_readbooks = rootView.findViewById(R.id.tv_setting_readbooks);
+        tv_setting_replybooks = rootView.findViewById(R.id.tv_setting_replybooks);
         switch_state = rootView.findViewById(R.id.switch_state);
         tv_logout = rootView.findViewById(R.id.tv_logout);
 
@@ -113,8 +110,8 @@ public class SettingFragment extends Fragment {
     private void setData(SettingInfoResponse settingInfoResponse){
 
         et_setting_name.setText( settingInfoResponse.getName() );
-        et_setting_readbooks.setText( settingInfoResponse.getRead_book_count() );
-        et_setting_replybooks.setText( settingInfoResponse.getActivity_count() );
+        tv_setting_readbooks.setText( settingInfoResponse.getRead_book_count() );
+        tv_setting_replybooks.setText( settingInfoResponse.getActivity_count() );
 
         String activity_state = settingInfoResponse.getActivity_state();
 
@@ -141,14 +138,14 @@ public class SettingFragment extends Fragment {
     }
 
     private void proc_changeActivityState(boolean isChecked){
-        ActivityState activityState = new ActivityState();
+        ActivitySetting activitySetting = new ActivitySetting();
         if (isChecked) {
-            activityState.setActivity_state("Y");
+            activitySetting.setActivity_state("Y");
         }else{
-            activityState.setActivity_state("N");
+            activitySetting.setActivity_state("N");
         }
 
-        retroClient.changeActivityState(activityState,new RetroCallback() {
+        retroClient.changeActivityState(activitySetting,new RetroCallback() {
             @Override
             public void onError(Throwable t) {
                 Log.d(TAG, "proc_changeActivityState onError ");

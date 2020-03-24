@@ -1,15 +1,18 @@
 package com.joojang.bookfriend.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,17 +20,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.joojang.bookfriend.BaseApplication;
 import com.joojang.bookfriend.R;
-import com.joojang.bookfriend.adapter.AdapterListBasic;
+import com.joojang.bookfriend.adapter.AdapterListBook;
 import com.joojang.bookfriend.api.RetroCallback;
 import com.joojang.bookfriend.api.RetroClient;
 import com.joojang.bookfriend.dataResponse.BookListResponse;
 import com.joojang.bookfriend.model.Book;
-import com.joojang.bookfriend.model.Image;
+import com.joojang.bookfriend.model.RecommGubun;
 import com.joojang.bookfriend.utils.Tools;
+import com.joojang.bookfriend.utils.Util;
 import com.joojang.bookfriend.widget.SpacingItemDecoration;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -40,7 +43,7 @@ public class RecommBookFragment extends Fragment {
     private Context mContext;
 
     private RecyclerView recyclerView;
-    private AdapterListBasic mAdapter;
+    private AdapterListBook mAdapter;
 
     private ArrayList<Book> items = new ArrayList<>();
 
@@ -50,6 +53,11 @@ public class RecommBookFragment extends Fragment {
     private int curPage = 0;
     private boolean isPageEnd = false;
 
+    private String[] array_name;
+    private String[] array_code;
+    private int mSelectedItem = 0;
+    private String mSelectedCode;
+    private EditText et_gubun;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -69,13 +77,25 @@ public class RecommBookFragment extends Fragment {
 
         retroClient = RetroClient.getInstance(getActivity()).createBaseApi();
 
+        array_code = BaseApplication.getInstance().gubun_code();
+        array_name = BaseApplication.getInstance().gubun_name();
+
         initComponent();
 
         return rootView;
     }
 
     private void initComponent() {
-        mAdapter = new AdapterListBasic(mContext, items);
+
+        et_gubun = rootView.findViewById(R.id.et_gubun);
+        et_gubun.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showStateDialog(v);
+            }
+        });
+
+        mAdapter = new AdapterListBook(mContext, items);
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(mContext, 1));
@@ -84,7 +104,7 @@ public class RecommBookFragment extends Fragment {
         recyclerView.setAdapter(mAdapter);
 
         // on item list clicked
-        mAdapter.setOnItemClickListener(new AdapterListBasic.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new AdapterListBook.OnItemClickListener() {
             @Override
             public void onItemClick(View view, Book obj, int position) {
                 Intent intent = new Intent( mContext , BookDetailActivity.class);
@@ -94,10 +114,18 @@ public class RecommBookFragment extends Fragment {
             }
         });
 
-        proc_getRecommendBooks();
-
-
-
+        mSelectedCode = array_code[0];
+        String gubun = Util.getGubunPreferences(getActivity());
+        if ( gubun != null && gubun.length() !=0 ){
+            mSelectedCode = gubun;
+            for(int i=0 ; i<array_code.length ; i++){
+                if ( gubun.equals( array_code[i] ) ){
+                    mSelectedItem = i;
+                }
+            }
+        }
+        proc_getRecommendBooks(mSelectedCode);
+        et_gubun.setText(array_name[mSelectedItem]);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -113,7 +141,7 @@ public class RecommBookFragment extends Fragment {
                     Log.d(TAG,"바닥에 도착");
                     if ( !isPageEnd ) {
                         page++;
-                        proc_getRecommendBooks();
+                        proc_getRecommendBooks(mSelectedCode);
                     }
                 }
 
@@ -127,11 +155,11 @@ public class RecommBookFragment extends Fragment {
         mAdapter.notifyDataSetChanged();
     }
 
-    private void proc_getRecommendBooks(){
+    private void proc_getRecommendBooks(String mSelectedCode){
 
         if ( page == curPage ) return;
 
-        retroClient.getRecommendBooks(page , new RetroCallback() {
+        retroClient.getRecommendBooks(mSelectedCode, page , new RetroCallback() {
             @Override
             public void onError(Throwable t) {
                 Log.d(TAG, "proc_getRecommendBooks onError ");
@@ -190,5 +218,25 @@ public class RecommBookFragment extends Fragment {
         }
     }
 
+    private void showStateDialog(final View v) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("권장도서 그룹 선택");
+        builder.setSingleChoiceItems(array_name, mSelectedItem, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                ((EditText) v).setText(array_name[i]);
+                mSelectedItem = i;
+                mSelectedCode = array_code[i];
+                page = 1;
+                curPage = 0;
+                items.clear();
+                Util.saveGubunPreferences(getActivity(),mSelectedCode);
+                proc_getRecommendBooks(mSelectedCode);
+                dialogInterface.dismiss();
+            }
+        });
+        builder.show();
+    }
 
 }
