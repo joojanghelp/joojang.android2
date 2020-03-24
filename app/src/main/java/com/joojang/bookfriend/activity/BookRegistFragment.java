@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.legacy.app.FragmentCompat;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
@@ -44,7 +45,8 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
-public class BookRegistFragment extends Fragment implements View.OnClickListener, ZXingScannerView.ResultHandler {
+public class BookRegistFragment extends Fragment implements View.OnClickListener, ZXingScannerView.ResultHandler
+                                                            , ActivityCompat.OnRequestPermissionsResultCallback {
 
     private final String TAG = BookRegistFragment.class.getSimpleName();
 
@@ -289,18 +291,23 @@ public class BookRegistFragment extends Fragment implements View.OnClickListener
 
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),Manifest.permission.CAMERA) ) {
-                Toast.makeText(getActivity(),"카메라 권한을 허용해주세요.",Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(),"카메라 권한을 허용해주세요.",Toast.LENGTH_SHORT).show();
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.CAMERA},
+                        1);
             } else {
                 ActivityCompat.requestPermissions(getActivity(),
                         new String[]{Manifest.permission.CAMERA},
                         1);
             }
+            initCamera();
         }else{
             initCamera();
         }
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case 1:
 
@@ -315,6 +322,9 @@ public class BookRegistFragment extends Fragment implements View.OnClickListener
     }
 
     private void initCamera(){
+
+
+
         FrameLayout cameraLayout = (FrameLayout) rootView.findViewById(R.id.fl_camera_layout);
         mScannerView = new ZXingScannerView(getActivity());
         List<BarcodeFormat> formats = new ArrayList<>();
@@ -322,5 +332,10 @@ public class BookRegistFragment extends Fragment implements View.OnClickListener
         formats.add(BarcodeFormat.EAN_8);
         mScannerView.setFormats(formats);
         cameraLayout.addView(mScannerView);
+
+        if ( mScannerView != null ) {
+            mScannerView.setResultHandler(this);
+            mScannerView.startCamera();
+        }
     }
 }
