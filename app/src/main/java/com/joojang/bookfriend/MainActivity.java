@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.navigation_recent:
                         fragmentManager.beginTransaction().replace(R.id.container, bookFragment).commitAllowingStateLoss();
-                        tv_ActionBarTitle.setText("독서목록");
+                        tv_ActionBarTitle.setText( "내독서목록");
                         return true;
                     case R.id.navigation_favorites:
                         fragmentManager.beginTransaction().replace(R.id.container, bookRegistFragment).commitAllowingStateLoss();

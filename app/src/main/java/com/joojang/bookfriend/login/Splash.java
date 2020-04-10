@@ -73,7 +73,10 @@ public class Splash extends AppCompatActivity {
             public void onFail(int code, String message) {
                 Log.d(TAG, "onFail : " + code);
                 Log.d(TAG, "onFail : " + message);
-                Toast.makeText(getApplicationContext(), code + ":" + message, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), code + ":" + message, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent( getApplicationContext() , LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
     }

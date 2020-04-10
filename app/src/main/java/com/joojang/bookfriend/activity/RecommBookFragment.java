@@ -137,7 +137,7 @@ public class RecommBookFragment extends Fragment {
                 int itemTotalCount = recyclerView.getAdapter().getItemCount();
 
                 Log.d(TAG,"scroll:"+lastVisibleItemPosition+":"+itemTotalCount);
-                if ( lastVisibleItemPosition == itemTotalCount ){
+                if ( lastVisibleItemPosition >= itemTotalCount ){
                     Log.d(TAG,"바닥에 도착");
                     if ( !isPageEnd ) {
                         page++;
@@ -169,13 +169,16 @@ public class RecommBookFragment extends Fragment {
             public void onSuccess(int code, Object receiveData) {
                 Log.d(TAG, "proc_getRecommendBooks onSuccess :"+code);
                 BookListResponse bookListResponse = (BookListResponse) receiveData;
-                if (bookListResponse != null) {
+                if (bookListResponse.getItems() != null) {
                     Log.d(TAG, "proc_getRecommendBooks result size: " + bookListResponse.getItems().size() );
                     if ( bookListResponse.getLast_page() == page ){
                         isPageEnd = true;
                     }
                     curPage = page;
                     setData(bookListResponse);
+                }else{
+                    items.clear();
+                    mAdapter.notifyDataSetChanged();
                 }
             }
 
