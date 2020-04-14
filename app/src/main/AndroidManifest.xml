@@ -38,6 +38,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".login.JoinActivity"
+            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.BookDetailActivity"

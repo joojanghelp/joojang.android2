@@ -16,6 +16,7 @@ import com.joojang.bookfriend.api.RetroCallback;
 import com.joojang.bookfriend.api.RetroClient;
 import com.joojang.bookfriend.dataResponse.JoinResponse;
 import com.joojang.bookfriend.model.JoinUser;
+import com.joojang.bookfriend.utils.ConfirmDialogCallback;
 import com.joojang.bookfriend.utils.Tools;
 import com.joojang.bookfriend.utils.Util;
 
@@ -122,8 +123,15 @@ public class JoinActivity extends AppCompatActivity {
     }
 
     private void join(JoinResponse joinResponse){
-        Intent intent = new Intent( getApplicationContext() , LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
+        Util.showDialog(this, "이메일 인증", "인증 메일이 발송 되었습니다.", new ConfirmDialogCallback() {
+            @Override
+            public void resultConfirmDialog(boolean result) {
+                Intent intent = new Intent( getApplicationContext() , LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+
+
     }
 }

@@ -89,4 +89,17 @@ public class Util {
         builder.setNegativeButton("취소", null);
         builder.show();
     }
+
+    public static void showDialog(Context context, String title, String message, final ConfirmDialogCallback callback) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                callback.resultConfirmDialog(true);
+            }
+        });
+        builder.show();
+    }
 }

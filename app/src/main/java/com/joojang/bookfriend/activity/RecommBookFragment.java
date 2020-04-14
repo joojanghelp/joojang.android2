@@ -29,6 +29,7 @@ import com.joojang.bookfriend.model.RecommGubun;
 import com.joojang.bookfriend.utils.Tools;
 import com.joojang.bookfriend.utils.Util;
 import com.joojang.bookfriend.widget.SpacingItemDecoration;
+import com.joojang.bookfriend.widget.WrapContentLinearLayoutManager;
 
 import java.util.ArrayList;
 
@@ -85,6 +86,7 @@ public class RecommBookFragment extends Fragment {
         return rootView;
     }
 
+
     private void initComponent() {
 
         et_gubun = rootView.findViewById(R.id.et_gubun);
@@ -98,7 +100,7 @@ public class RecommBookFragment extends Fragment {
         mAdapter = new AdapterListBook(mContext, items);
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new GridLayoutManager(mContext, 1));
+        recyclerView.setLayoutManager(new WrapContentLinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         recyclerView.addItemDecoration(new SpacingItemDecoration(1, Tools.dpToPx(mContext, 12), true));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(mAdapter);
